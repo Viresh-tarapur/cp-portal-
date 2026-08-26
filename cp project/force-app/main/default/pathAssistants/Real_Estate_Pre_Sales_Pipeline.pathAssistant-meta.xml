@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Opportunity</entityName>
+    <fieldName>StageName</fieldName>
+    <masterLabel>Opportunity Post-Sales Path</masterLabel>
+    <pathAssistantSteps>
+        <fieldNames>Booking_Amount__c</fieldNames>
+        <fieldNames>Payment_Mode__c</fieldNames>
+        <picklistValueName>Booking Confirmed</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Payment_Mode__c</fieldNames>
+        <fieldNames>Loan_Required__c</fieldNames>
+        <fieldNames>Bank_Name__c</fieldNames>
+        <picklistValueName>Payment</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Loan_Required__c</fieldNames>
+        <fieldNames>Bank_Name__c</fieldNames>
+        <picklistValueName>Documents</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Payment_Mode__c</fieldNames>
+        <fieldNames>Booking_Amount__c</fieldNames>
+        <picklistValueName>Agreement</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Payment_Mode__c</fieldNames>
+        <fieldNames>Booking_Amount__c</fieldNames>
+        <picklistValueName>Registration</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Payment_Mode__c</fieldNames>
+        <fieldNames>Booking_Amount__c</fieldNames>
+        <picklistValueName>Handover</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Booking_Amount__c</fieldNames>
+        <fieldNames>Payment_Mode__c</fieldNames>
+        <picklistValueName>Closed Won</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>__MASTER__</recordTypeName>
+</PathAssistant>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Approved_Receipt_Immutable</fullName>
+    <active>true</active>
+    <description>An approved receipt is the official ledger record and cannot be reused.</description>
+    <errorConditionFormula>AND(NOT(ISNEW()), ISPICKVAL(PRIORVALUE(Receipt_Status__c), &quot;Approved&quot;))</errorConditionFormula>
+    <errorMessage>Approved receipts cannot be edited or reused.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,104 @@
+<template>
+    <div class="visits-container">
+        <div class="page-title-bar">
+            <div>
+                <h1 class="page-heading">Site Visits Schedule</h1>
+                <p class="page-sub">Monitor scheduled, confirmed, and completed property walkthroughs.</p>
+            </div>
+            <button class="slds-button slds-button_brand" onclick={handleOpenScheduleModal}>
+                <lightning-icon icon-name="utility:add" size="x-small" variant="inverse"></lightning-icon>
+                <span>Schedule New Visit</span>
+            </button>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading Site Visits" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={hasVisits}>
+                <div class="visits-table-card">
+                    <div class="slds-scrollable_x">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Ref #</th>
+                                    <th>Customer</th>
+                                    <th>Project</th>
+                                    <th>Date & Time</th>
+                                    <th>Visitors</th>
+                                    <th>Sales Executive</th>
+                                    <th>Status</th>
+                                    <th>Outcome</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={visits} for:item="v">
+                                    <tr key={v.Id}>
+                                        <td class="font-bold text-blue">{v.Name}</td>
+                                        <td>
+                                            <span class="cust-name">{v.Customer_Name__c}</span>
+                                            <span class="cust-phone">{v.Customer_Phone__c}</span>
+                                        </td>
+                                        <td>{v.Project__r.Name}</td>
+                                        <td>
+                                            <span class="v-date-txt">{v.Visit_Date__c}</span>
+                                            <span class="v-time-txt">{v.Visit_Time__c}</span>
+                                        </td>
+                                        <td>{v.Number_of_Visitors__c}</td>
+                                        <td>
+                                            <template if:true={v.Sales_Executive__c}>
+                                                <span>{v.Sales_Executive__r.Name}</span>
+                                            </template>
+                                            <template if:false={v.Sales_Executive__c}>
+                                                <span class="text-muted">Unassigned</span>
+                                            </template>
+                                        </td>
+                                        <td><span class={v.statusBadgeClass}>{v.Status__c}</span></td>
+                                        <td>
+                                            <template if:true={v.Visit_Outcome__c}>
+                                                <span class="outcome-badge">{v.Visit_Outcome__c}</span>
+                                            </template>
+                                            <template if:false={v.Visit_Outcome__c}>
+                                                <span class="text-muted">—</span>
+                                            </template>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
+
+            <template if:false={hasVisits}>
+                <div class="empty-state-box">
+                    <lightning-icon icon-name="utility:event" size="large"></lightning-icon>
+                    <h3>No Site Visits Found</h3>
+                    <p>Schedule site visits for your qualified leads to showcase model apartments.</p>
+                </div>
+            </template>
+        </template>
+
+        <!-- Modal -->
+        <template if:true={showScheduleModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header modal-custom-header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseScheduleModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium modal-title">Schedule Client Site Visit</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <c-cp-site-visit
+                            onvisitscheduled={handleVisitScheduledSuccess}
+                            oncancel={handleCloseScheduleModal}>
+                        </c-cp-site-visit>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

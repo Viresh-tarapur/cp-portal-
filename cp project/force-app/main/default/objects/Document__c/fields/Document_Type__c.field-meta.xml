@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Document_Type__c</fullName>
+    <label>Document Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>PAN</fullName>
+                <default>false</default>
+                <label>PAN</label>
+            </value>
+            <value>
+                <fullName>Aadhaar</fullName>
+                <default>false</default>
+                <label>Aadhaar</label>
+            </value>
+            <value>
+                <fullName>Photo</fullName>
+                <default>false</default>
+                <label>Photo</label>
+            </value>
+            <value>
+                <fullName>KYC</fullName>
+                <default>true</default>
+                <label>KYC</label>
+            </value>
+            <value>
+                <fullName>Cost Sheet</fullName>
+                <default>false</default>
+                <label>Cost Sheet</label>
+            </value>
+            <value>
+                <fullName>Consolidated Receipt</fullName>
+                <default>false</default>
+                <label>Consolidated Receipt</label>
+            </value>
+            <value>
+                <fullName>Agreement Demand Letter</fullName>
+                <default>false</default>
+                <label>Agreement Demand Letter</label>
+            </value>
+            <value>
+                <fullName>Draft Sale Agreement</fullName>
+                <default>false</default>
+                <label>Draft Sale Agreement</label>
+            </value>
+            <value>
+                <fullName>Allotment Letter</fullName>
+                <default>false</default>
+                <label>Allotment Letter</label>
+            </value>
+            <value>
+                <fullName>Sale Agreement</fullName>
+                <default>false</default>
+                <label>Sale Agreement</label>
+            </value>
+            <value>
+                <fullName>Sale Deed</fullName>
+                <default>false</default>
+                <label>Sale Deed</label>
+            </value>
+            <value>
+                <fullName>Possession Certificate</fullName>
+                <default>false</default>
+                <label>Possession Certificate</label>
+            </value>
+            <value>
+                <fullName>Key Handover Letter</fullName>
+                <default>false</default>
+                <label>Key Handover Letter</label>
+            </value>
+            <value>
+                <fullName>Maintenance Letter</fullName>
+                <default>false</default>
+                <label>Maintenance Letter</label>
+            </value>
+            <value>
+                <fullName>Cancellation Letter</fullName>
+                <default>false</default>
+                <label>Cancellation Letter</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Loan</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Loan</label>
+            </value>
+            <value>
+                <fullName>Others</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Others</label>
+            </value>
+            <value>
+                <fullName>Passport</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Passport</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

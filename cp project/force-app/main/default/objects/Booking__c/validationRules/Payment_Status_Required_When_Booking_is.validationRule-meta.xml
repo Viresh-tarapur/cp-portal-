@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payment_Status_Required_When_Booking_is</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Booking_Status__c, &quot;Confirmed&quot;),
+    ISBLANK(TEXT(Payment_Status__c))
+)</errorConditionFormula>
+    <errorMessage>Please select the Payment Status when the Booking is Confirmed.</errorMessage>
+</ValidationRule>

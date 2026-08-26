@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Refund_Requires_Approved_Cancellation</fullName>
+    <active>true</active>
+    <description>Prevents a refund from being processed until cancellation has both approvals.</description>
+    <errorConditionFormula>AND(ISPICKVAL(Status__c, &quot;Processed &amp; Disbursed&quot;), OR(ISBLANK(Cancellation__c), NOT(ISPICKVAL(Cancellation__r.Status__c, &quot;Approved&quot;))))</errorConditionFormula>
+    <errorMessage>A refund can be processed only for an approved cancellation.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CP_Lead_Phone_Format</fullName>
+    <active>true</active>
+    <description>Validates phone format when provided on CP leads</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(LeadSource, &apos;Channel Partner&apos;),
+    NOT(ISBLANK(Phone)),
+    NOT(REGEX(Phone, &apos;^[0-9+\\-\\s()]{7,20}$&apos;))
+)</errorConditionFormula>
+    <errorMessage>Please provide a valid phone number format with 7 to 20 digits/characters.</errorMessage>
+</ValidationRule>

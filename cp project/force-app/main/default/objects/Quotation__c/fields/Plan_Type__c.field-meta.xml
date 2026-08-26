@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Plan_Type__c</fullName>
+    <label>Payment Plan Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Standard Payment Plan</fullName>
+                <default>true</default>
+                <label>Standard Payment Plan</label>
+            </value>
+            <value>
+                <fullName>Custom Payment Plan</fullName>
+                <default>false</default>
+                <label>Custom Payment Plan</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

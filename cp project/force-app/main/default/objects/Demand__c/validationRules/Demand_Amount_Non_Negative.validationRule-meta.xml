@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Demand_Amount_Non_Negative</fullName>
+    <active>true</active>
+    <description>Demand Amount must be greater than zero.</description>
+    <errorConditionFormula>AND(NOT(ISBLANK(Demand_Amount__c)), Demand_Amount__c &lt;= 0)</errorConditionFormula>
+    <errorDisplayField>Demand_Amount__c</errorDisplayField>
+    <errorMessage>Demand Amount must be greater than zero.</errorMessage>
+</ValidationRule>

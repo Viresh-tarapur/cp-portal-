@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rejected_Receipt_Cannot_Be_Reused</fullName>
+    <active>true</active>
+    <description>Rule of Money Violation: Rejected receipts are dead records and cannot be reused or reactivated.</description>
+    <errorConditionFormula>AND(PRIORVALUE(Receipt_Status__c) = &quot;Rejected&quot;, ISCHANGED(Receipt_Status__c))</errorConditionFormula>
+    <errorMessage>Rule of Money Violation: Rejected receipts are dead records and cannot be reused or reactivated.</errorMessage>
+</ValidationRule>

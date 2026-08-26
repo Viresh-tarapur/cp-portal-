@@ -1,0 +1,137 @@
+<template>
+    <div class="portal-container">
+        <!-- Top Navigation Header -->
+        <header class="portal-header">
+            <div class="header-left">
+                <div class="logo-badge">
+                    <lightning-icon icon-name="custom:custom68" size="medium" alternative-text="CP Portal"></lightning-icon>
+                    <div class="brand-text">
+                        <span class="brand-title">CHANNEL PARTNER PORTAL</span>
+                        <span class="brand-sub">Real Estate Enterprise Network</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="header-nav">
+                <button class={dashboardTabClass} onclick={handleNavDashboard} data-id="dashboard">
+                    <lightning-icon icon-name="utility:dashboard" size="x-small"></lightning-icon>
+                    <span>Dashboard</span>
+                </button>
+                <button class={projectsTabClass} onclick={handleNavProjects} data-id="projects">
+                    <lightning-icon icon-name="utility:company" size="x-small"></lightning-icon>
+                    <span>Projects</span>
+                </button>
+                <button class={inventoryTabClass} onclick={handleNavInventory} data-id="inventory">
+                    <lightning-icon icon-name="utility:matrix" size="x-small"></lightning-icon>
+                    <span>Inventory</span>
+                </button>
+                <button class={leadsTabClass} onclick={handleNavLeads} data-id="leads">
+                    <lightning-icon icon-name="utility:lead" size="x-small"></lightning-icon>
+                    <span>My Leads</span>
+                </button>
+                <button class={siteVisitsTabClass} onclick={handleNavSiteVisits} data-id="visits">
+                    <lightning-icon icon-name="utility:event" size="x-small"></lightning-icon>
+                    <span>Site Visits</span>
+                </button>
+                <button class={commissionTabClass} onclick={handleNavCommission} data-id="commissions">
+                    <lightning-icon icon-name="utility:money" size="x-small"></lightning-icon>
+                    <span>Commissions</span>
+                </button>
+                <button class={kycTabClass} onclick={handleNavKyc} data-id="kyc">
+                    <lightning-icon icon-name="utility:shield" size="x-small"></lightning-icon>
+                    <span>KYC</span>
+                </button>
+                <button class={supportTabClass} onclick={handleNavSupport} data-id="support">
+                    <lightning-icon icon-name="utility:case" size="x-small"></lightning-icon>
+                    <span>Support</span>
+                </button>
+            </nav>
+
+            <!-- User / Action Profile -->
+            <div class="header-right">
+                <button class="slds-button slds-button_brand register-lead-btn" onclick={handleOpenRegisterLeadModal}>
+                    <lightning-icon icon-name="utility:add" size="x-small" variant="inverse"></lightning-icon>
+                    <span>Register Lead</span>
+                </button>
+                <button class="profile-avatar-btn" onclick={handleNavProfile} title="My Profile">
+                    <lightning-icon icon-name="utility:user" size="small"></lightning-icon>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Body View Router -->
+        <main class="portal-main-content">
+            <template if:true={isDashboard}>
+                <c-cp-portal-dashboard
+                    onnavigateto={handleChildNavigation}
+                    onopenregisterlead={handleOpenRegisterLeadModal}>
+                </c-cp-portal-dashboard>
+            </template>
+
+            <template if:true={isProjects}>
+                <c-cp-project-list onselectproject={handleProjectSelected}></c-cp-project-list>
+            </template>
+
+            <template if:true={isProjectDetails}>
+                <c-cp-project-details
+                    project-id={selectedProjectId}
+                    onbacktoprojects={handleNavProjects}
+                    onviewinventory={handleViewProjectInventory}
+                    onregisterleadforproject={handleRegisterLeadForProject}>
+                </c-cp-project-details>
+            </template>
+
+            <template if:true={isInventory}>
+                <c-cp-inventory selected-project-id={selectedProjectId}></c-cp-inventory>
+            </template>
+
+            <template if:true={isLeads}>
+                <c-cp-lead-list onopenregisterlead={handleOpenRegisterLeadModal}></c-cp-lead-list>
+            </template>
+
+            <template if:true={isSiteVisits}>
+                <c-cp-site-visit-list></c-cp-site-visit-list>
+            </template>
+
+            <template if:true={isCommission}>
+                <c-cp-commission></c-cp-commission>
+            </template>
+
+            <template if:true={isKyc}>
+                <c-cp-kyc></c-cp-kyc>
+            </template>
+
+            <template if:true={isSupport}>
+                <c-cp-support></c-cp-support>
+            </template>
+
+            <template if:true={isProfile}>
+                <c-cp-partner-profile></c-cp-partner-profile>
+            </template>
+        </main>
+
+        <!-- Global Lead Registration Modal -->
+        <template if:true={showRegisterLeadModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header modal-custom-header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseRegisterLeadModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium slds-hyphenate modal-title">Register New Customer Lead</h2>
+                        <p class="slds-m-top_x-small modal-subtitle">Lock in exclusivity ownership & instant protection for your client.</p>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium modal-custom-body">
+                        <c-cp-lead-registration
+                            preselected-project-id={selectedProjectId}
+                            onregistrationsuccess={handleRegistrationSuccess}
+                            oncancel={handleCloseRegisterLeadModal}>
+                        </c-cp-lead-registration>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

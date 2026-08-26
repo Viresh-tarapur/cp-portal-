@@ -1,0 +1,163 @@
+<template>
+    <div class="support-container">
+        <!-- Page Header -->
+        <div class="page-title-bar">
+            <div>
+                <h1 class="page-heading">Partner Support & Helpdesk</h1>
+                <p class="page-sub">Raise operational queries, lead dispute inquiries, commission escalations, and technical assistance tickets.</p>
+            </div>
+            <button class="slds-button slds-button_brand new-ticket-btn" onclick={handleOpenNewTicketModal}>
+                <lightning-icon icon-name="utility:add" size="x-small" variant="inverse"></lightning-icon>
+                <span>Raise Support Ticket</span>
+            </button>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading Support Cases..." size="medium"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <!-- Support Summary Metrics -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-lbl">Total Tickets</span>
+                    <span class="metric-val">{totalCasesCount}</span>
+                </div>
+                <div class="metric-card metric-open">
+                    <span class="metric-lbl">In Progress / Open</span>
+                    <span class="metric-val">{openCasesCount}</span>
+                </div>
+                <div class="metric-card metric-resolved">
+                    <span class="metric-lbl">Resolved Tickets</span>
+                    <span class="metric-val">{resolvedCasesCount}</span>
+                </div>
+            </div>
+
+            <!-- Tickets Table Card -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h2>Ticket History & Inquiries</h2>
+                </div>
+                <template if:true={hasCases}>
+                    <div class="slds-scrollable_x">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticket #</th>
+                                    <th>Subject</th>
+                                    <th>Category</th>
+                                    <th>Priority</th>
+                                    <th>Project</th>
+                                    <th>Created Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={cases} for:item="c">
+                                    <tr key={c.Id}>
+                                        <td class="font-bold text-blue">{c.CaseNumber}</td>
+                                        <td>
+                                            <span class="subject-text">{c.Subject}</span>
+                                            <span class="desc-preview">{c.Description}</span>
+                                        </td>
+                                        <td>
+                                            <span class="category-pill">{c.Category__c}</span>
+                                        </td>
+                                        <td>
+                                            <span class={c.priorityBadgeClass}>{c.Priority}</span>
+                                        </td>
+                                        <td>{c.projectName}</td>
+                                        <td>{c.formattedCreatedDate}</td>
+                                        <td>
+                                            <span class={c.statusBadgeClass}>{c.Status}</span>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+                <template if:false={hasCases}>
+                    <div class="empty-state">
+                        <lightning-icon icon-name="utility:case" size="large"></lightning-icon>
+                        <p class="empty-title">No Support Tickets Raised</p>
+                        <p class="empty-desc">Need assistance with a lead, commission, or project? Click the button above to raise a ticket.</p>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- New Ticket Modal -->
+        <template if:true={showNewTicketModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header modal-custom-header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseNewTicketModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium modal-title">Raise New Support Inquiry</h2>
+                        <p class="modal-subtitle">Our dedicated Channel Relationship team responds within 2 business hours.</p>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium modal-custom-body">
+                        <div class="modal-form-grid">
+                            <div class="form-full">
+                                <lightning-input
+                                    label="Subject / Summary"
+                                    name="subject"
+                                    placeholder="Brief summary of your query or issue"
+                                    value={form.subject}
+                                    required
+                                    onchange={handleFormChange}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="form-half">
+                                <lightning-combobox
+                                    label="Issue Category"
+                                    name="category"
+                                    value={form.category}
+                                    options={categoryOptions}
+                                    required
+                                    onchange={handleFormChange}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="form-half">
+                                <lightning-combobox
+                                    label="Related Project (Optional)"
+                                    name="projectId"
+                                    value={form.projectId}
+                                    placeholder="Select Project if applicable"
+                                    options={projectOptions}
+                                    onchange={handleFormChange}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="form-full">
+                                <lightning-textarea
+                                    label="Detailed Description"
+                                    name="description"
+                                    placeholder="Please provide complete context (e.g. Lead name, booking reference, UTR reference)..."
+                                    value={form.description}
+                                    required
+                                    rows="4"
+                                    onchange={handleFormChange}>
+                                </lightning-textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer modal-footer">
+                        <button class="slds-button slds-button_neutral" onclick={handleCloseNewTicketModal}>Cancel</button>
+                        <button
+                            class="slds-button slds-button_brand submit-ticket-btn"
+                            disabled={isSubmitDisabled}
+                            onclick={handleSubmitTicket}>
+                            Submit Ticket
+                        </button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

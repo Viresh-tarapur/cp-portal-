@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Protection_End_After_Start</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISBLANK(Protection_Start_Date__c)), NOT(ISBLANK(Protection_End_Date__c)), Protection_End_Date__c &lt; Protection_Start_Date__c)</errorConditionFormula>
+    <errorMessage>Protection End Date must be on or after Protection Start Date.</errorMessage>
+</ValidationRule>

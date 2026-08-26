@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Swap_Must_Be_Within_Same_Project</fullName>
+    <active>true</active>
+    <description>Unit Swap must be within the same Project.</description>
+    <errorConditionFormula>AND(NOT(ISBLANK(New_Target_Unit__c)), NOT(ISBLANK(Booking__r.Project__c)), New_Target_Unit__r.Project__c != Booking__r.Project__c)</errorConditionFormula>
+    <errorMessage>Unit Swap must be within the same Project.</errorMessage>
+</ValidationRule>

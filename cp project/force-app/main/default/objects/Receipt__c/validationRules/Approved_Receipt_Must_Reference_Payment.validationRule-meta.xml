@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Approved_Receipt_Must_Reference_Payment</fullName>
+    <active>true</active>
+    <description>Approved receipt must reference a valid Payment record.</description>
+    <errorConditionFormula>AND(ISPICKVAL(Receipt_Status__c, &quot;Approved&quot;), ISBLANK(Payment__c))</errorConditionFormula>
+    <errorMessage>Approved receipt must reference a valid Payment record.</errorMessage>
+</ValidationRule>

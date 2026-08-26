@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StandardValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sorted>false</sorted>
+    <standardValue>
+        <fullName>Open - Not Contacted</fullName>
+        <default>true</default>
+        <label>New Lead</label>
+        <converted>false</converted>
+    </standardValue>
+    <standardValue>
+        <fullName>Qualification</fullName>
+        <default>false</default>
+        <label>Qualification</label>
+        <converted>false</converted>
+    </standardValue>
+    <standardValue>
+        <fullName>Needs Analysis</fullName>
+        <default>false</default>
+        <label>Needs Analysis</label>
+        <converted>false</converted>
+    </standardValue>
+    <standardValue>
+        <fullName>Site Visit Scheduled</fullName>
+        <default>false</default>
+        <label>Site Visit Scheduled</label>
+        <converted>false</converted>
+    </standardValue>
+    <standardValue>
+        <fullName>Site Visit Completed</fullName>
+        <default>false</default>
+        <label>Site Visit Completed</label>
+        <converted>false</converted>
+    </standardValue>
+    <standardValue>
+        <fullName>Negotiation</fullName>
+        <default>false</default>
+        <label>Negotiation</label>
+        <converted>false</converted>
+    </standardValue>
+    <standardValue>
+        <fullName>Unit Selected</fullName>
+        <default>false</default>
+        <label>Unit Selected</label>
+        <converted>false</converted>
+    </standardValue>
+    <standardValue>
+        <fullName>Booking Initiated</fullName>
+        <default>false</default>
+        <label>Booking Initiated</label>
+        <converted>false</converted>
+    </standardValue>
+    <standardValue>
+        <fullName>Qualified</fullName>
+        <default>false</default>
+        <label>Converted</label>
+        <converted>true</converted>
+    </standardValue>
+    <standardValue>
+        <fullName>Closed - Not Converted</fullName>
+        <default>false</default>
+        <label>Closed - Not Converted</label>
+        <converted>false</converted>
+    </standardValue>
+</StandardValueSet>

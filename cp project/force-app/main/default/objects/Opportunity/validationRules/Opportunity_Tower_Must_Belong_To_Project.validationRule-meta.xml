@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Tower_Must_Belong_To_Project</fullName>
+    <active>true</active>
+    <description>Ensures that the selected Tower belongs to the selected Project on Opportunity.</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Project__c)),
+    NOT(ISBLANK(Tower__c)),
+    Tower__r.Project__c != Project__c
+)</errorConditionFormula>
+    <errorDisplayField>Tower__c</errorDisplayField>
+    <errorMessage>Selected Tower does not belong to the selected Project.</errorMessage>
+</ValidationRule>

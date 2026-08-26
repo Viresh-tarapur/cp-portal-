@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Action__c</fullName>
+    <label>Action</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+                <value>
+                    <fullName>Partner Approved</fullName>
+                    <default>false</default>
+                    <label>Partner Approved</label>
+                </value>
+                <value>
+                    <fullName>Partner Rejected</fullName>
+                    <default>false</default>
+                    <label>Partner Rejected</label>
+                </value>
+                <value>
+                    <fullName>KYC Approved</fullName>
+                    <default>false</default>
+                    <label>KYC Approved</label>
+                </value>
+                <value>
+                    <fullName>KYC Rejected</fullName>
+                    <default>false</default>
+                    <label>KYC Rejected</label>
+                </value>
+                <value>
+                    <fullName>Project Access Granted</fullName>
+                    <default>false</default>
+                    <label>Project Access Granted</label>
+                </value>
+                <value>
+                    <fullName>Project Access Revoked</fullName>
+                    <default>false</default>
+                    <label>Project Access Revoked</label>
+                </value>
+                <value>
+                    <fullName>Lead Registered</fullName>
+                    <default>true</default>
+                    <label>Lead Registered</label>
+                </value>
+                <value>
+                    <fullName>Lead Protected</fullName>
+                    <default>false</default>
+                    <label>Lead Protected</label>
+                </value>
+                <value>
+                    <fullName>Lead Protection Expired</fullName>
+                    <default>false</default>
+                    <label>Lead Protection Expired</label>
+                </value>
+                <value>
+                    <fullName>Duplicate Lead Blocked</fullName>
+                    <default>false</default>
+                    <label>Duplicate Lead Blocked</label>
+                </value>
+                <value>
+                    <fullName>Unit Reserved</fullName>
+                    <default>false</default>
+                    <label>Unit Reserved</label>
+                </value>
+                <value>
+                    <fullName>Unit Booked</fullName>
+                    <default>false</default>
+                    <label>Unit Booked</label>
+                </value>
+                <value>
+                    <fullName>Commission Approved</fullName>
+                    <default>false</default>
+                    <label>Commission Approved</label>
+                </value>
+                <value>
+                    <fullName>Commission Rejected</fullName>
+                    <default>false</default>
+                    <label>Commission Rejected</label>
+                </value>
+                <value>
+                    <fullName>Commission Paid</fullName>
+                    <default>false</default>
+                    <label>Commission Paid</label>
+                </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Remarks_Required_When_Booking_is_Cancell</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Booking_Status__c, &quot;Cancelled&quot;),
+    ISBLANK(Remarks__c)
+)</errorConditionFormula>
+    <errorMessage>Please enter remarks when cancelling a booking.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cannot_Swap_After_Registration</fullName>
+    <active>true</active>
+    <description>Golden Rule Violation: Unit Swap is not allowed after Registration stage.</description>
+    <errorConditionFormula>OR(ISPICKVAL(Booking__r.Stage__c, &quot;Registration&quot;), ISPICKVAL(Booking__r.Stage__c, &quot;Handover&quot;), ISPICKVAL(Booking__r.Stage__c, &quot;Completed&quot;))</errorConditionFormula>
+    <errorMessage>Golden Rule Violation: Unit Swap is not allowed after Registration stage.</errorMessage>
+</ValidationRule>

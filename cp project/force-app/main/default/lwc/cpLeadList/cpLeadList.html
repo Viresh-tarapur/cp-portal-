@@ -1,0 +1,206 @@
+<template>
+    <div class="leads-container">
+        <!-- 1. Salesforce Header Card -->
+        <div class="sf-page-header">
+            <div class="sf-header-top">
+                <div class="sf-header-title-block">
+                    <lightning-icon icon-name="standard:lead" size="medium" class="sf-header-icon"></lightning-icon>
+                    <div class="sf-title-text-wrap">
+                        <span class="sf-object-name">Leads</span>
+                        <h1 class="sf-header-title">
+                            <span>All Leads</span>
+                            <span class="sf-dropdown-arrow">▼</span>
+                            <span class="sf-pin-icon" title="Pin list view">📌</span>
+                        </h1>
+                    </div>
+                </div>
+                <div class="sf-header-actions">
+                    <div class="slds-button-group" role="group">
+                        <button class="slds-button slds-button_brand" onclick={handleOpenRegisterLead}>New Lead</button>
+                        <button class="slds-button slds-button_neutral" onclick={handleImportClick}>Import</button>
+                        <button class="slds-button slds-button_neutral" onclick={handleChangeOwnerClick}>Change Owner</button>
+                        <button class="slds-button slds-button_icon slds-button_icon-border-filled" title="More Actions">
+                            <lightning-icon icon-name="utility:down" size="x-small"></lightning-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. List Information -->
+            <div class="sf-header-meta">
+                <span class="meta-text">{totalCount} items • Sorted by Created Date • Filtered by All Leads</span>
+            </div>
+        </div>
+
+        <!-- 3. Toolbar & Search -->
+        <div class="sf-toolbar-card">
+            <div class="sf-search-input">
+                <lightning-input
+                    type="search"
+                    placeholder="🔍 Search this list..."
+                    value={searchKey}
+                    onchange={handleSearchChange}
+                    variant="label-hidden">
+                </lightning-input>
+            </div>
+            <div class="filter-pills">
+                <button class={allFilterClass} onclick={handleFilterStatus} data-status="All">All ({totalCount})</button>
+                <button class={acceptedFilterClass} onclick={handleFilterStatus} data-status="Accepted">Protected ({protectedCount})</button>
+                <button class={expiredFilterClass} onclick={handleFilterStatus} data-status="Expired">Expired ({expiredCount})</button>
+                <button class={duplicateFilterClass} onclick={handleFilterStatus} data-status="Duplicate">Duplicate ({duplicateCount})</button>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading Leads" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={hasLeads}>
+                <div class="sf-table-card">
+                    <div class="slds-scrollable_x">
+                        <table class="sf-leads-table">
+                            <thead>
+                                <tr>
+                                    <th class="cb-col"><input type="checkbox" /></th>
+                                    <th>Lead Name</th>
+                                    <th>Company</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Assigned To (Round Robin)</th>
+                                    <th>Duplicate Indicator</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={filteredLeads} for:item="l">
+                                    <tr key={l.Id}>
+                                        <td class="cb-col"><input type="checkbox" /></td>
+                                        <td class="name-cell">
+                                            <a href="javascript:void(0);" class="sf-lead-link" onclick={handleViewDetails} data-id={l.Id}>
+                                                {l.Customer_Name__c}
+                                            </a>
+                                        </td>
+                                        <td>{l.Project__r.Name}</td>
+                                        <td><span class="phone-text">{l.Customer_Phone__c}</span></td>
+                                        <td><span class="email-text">{l.Customer_Email__c}</span></td>
+                                        <td>
+                                            <span class={l.ownerPillClass} title="Assigned by Round Robin">{l.ownerNameDisplay}</span>
+                                        </td>
+                                        <td>
+                                            <template if:true={l.showSameOwnerDup}>
+                                                <span class="badge-same-owner-dup" title="Duplicate assigned to the same Sales Executive">D</span>
+                                            </template>
+                                            <template if:false={l.showSameOwnerDup}>
+                                                <span class="no-dup-text">—</span>
+                                            </template>
+                                        </td>
+                                        <td>
+                                            <div class="action-cell-btns">
+                                                <button class="icon-action-btn" title="Schedule Site Visit" onclick={handleScheduleVisit} data-id={l.Id}>
+                                                    <lightning-icon icon-name="utility:event" size="xx-small"></lightning-icon>
+                                                </button>
+                                                <button class="icon-action-btn" title="View Lead 360 Details" onclick={handleViewDetails} data-id={l.Id}>
+                                                    <lightning-icon icon-name="utility:preview" size="xx-small"></lightning-icon>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
+
+            <template if:false={hasLeads}>
+                <div class="empty-leads">
+                    <lightning-icon icon-name="utility:lead" size="large"></lightning-icon>
+                    <h3>No leads found</h3>
+                    <p>Start registering leads to protect ownership and earn deal commissions.</p>
+                </div>
+            </template>
+        </template>
+
+        <!-- Lead 360 Detail Modal -->
+        <template if:true={selectedLeadForView}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header modal-detail-header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseDetailModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium modal-detail-title">Lead 360 Profile • {selectedLeadForView.Customer_Name__c}</h2>
+                        <span class="modal-detail-code">Registration ID: {selectedLeadForView.Name}</span>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="lead-detail-grid">
+                            <div class="detail-group">
+                                <span class="detail-lbl">Project / Company</span>
+                                <span class="detail-val">{selectedLeadForView.Project__r.Name}</span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-lbl">Assigned Executive</span>
+                                <span class="detail-val" title="Assigned by Round Robin">{selectedLeadForView.ownerNameDisplay}</span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-lbl">Phone Number</span>
+                                <span class="detail-val">{selectedLeadForView.Customer_Phone__c}</span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-lbl">Email Address</span>
+                                <span class="detail-val">{selectedLeadForView.Customer_Email__c}</span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-lbl">Budget</span>
+                                <span class="detail-val">₹{selectedLeadForView.Budget__c}</span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-lbl">Exclusivity Protected Until</span>
+                                <span class="detail-val highlight-blue">{selectedLeadForView.Protection_End_Date__c}</span>
+                            </div>
+                        </div>
+
+                        <template if:true={selectedLeadForView.Notes__c}>
+                            <div class="notes-box slds-m-top_medium">
+                                <span class="detail-lbl">Partner Notes</span>
+                                <p>{selectedLeadForView.Notes__c}</p>
+                            </div>
+                        </template>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={handleCloseDetailModal}>Close</button>
+                        <button class="slds-button slds-button_brand" onclick={handleScheduleVisitFromDetail}>Schedule Site Visit</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- Site Visit Schedule Modal -->
+        <template if:true={showScheduleModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header modal-detail-header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseScheduleModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium modal-detail-title">Schedule Client Site Visit</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <c-cp-site-visit
+                            prefilled-lead-id={selectedLeadForVisit.Lead__c}
+                            prefilled-project-id={selectedLeadForVisit.Project__c}
+                            prefilled-customer-name={selectedLeadForVisit.Customer_Name__c}
+                            prefilled-customer-phone={selectedLeadForVisit.Customer_Phone__c}
+                            prefilled-customer-email={selectedLeadForVisit.Customer_Email__c}
+                            onvisitscheduled={handleVisitScheduledSuccess}
+                            oncancel={handleCloseScheduleModal}>
+                        </c-cp-site-visit>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

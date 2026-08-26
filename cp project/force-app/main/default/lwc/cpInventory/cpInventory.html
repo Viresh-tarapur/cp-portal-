@@ -1,0 +1,127 @@
+<template>
+    <div class="inventory-container">
+        <!-- Controls & Filters Bar -->
+        <div class="inventory-filter-card">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <lightning-combobox
+                        name="projectSelect"
+                        label="Select Project"
+                        value={selectedProjectId}
+                        placeholder="Choose Project"
+                        options={projectOptions}
+                        onchange={handleProjectChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="filter-group">
+                    <lightning-combobox
+                        name="statusFilter"
+                        label="Status"
+                        value={selectedStatus}
+                        options={statusOptions}
+                        onchange={handleStatusChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="filter-group">
+                    <lightning-combobox
+                        name="unitTypeFilter"
+                        label="Unit Type"
+                        value={selectedUnitType}
+                        options={unitTypeOptions}
+                        onchange={handleUnitTypeChange}>
+                    </lightning-combobox>
+                </div>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading Inventory" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={hasUnits}>
+                <div class="units-grid">
+                    <template for:each={units} for:item="u">
+                        <div key={u.Id} class={u.cardClass}>
+                            <div class="unit-header">
+                                <span class="unit-num">{u.Unit_Number__c}</span>
+                                <span class={u.statusBadgeClass}>{u.Status__c}</span>
+                            </div>
+
+                            <div class="unit-body">
+                                <div class="unit-spec-row">
+                                    <span class="unit-type-pill">{u.Unit_Type__c}</span>
+                                    <span class="unit-area">{u.Area__c} Sq. Ft.</span>
+                                </div>
+                                <div class="unit-meta">
+                                    <span>Floor: <strong>{u.Floor__c}</strong></span>
+                                    <template if:true={u.Facing__c}>
+                                        <span>Facing: <strong>{u.Facing__c}</strong></span>
+                                    </template>
+                                </div>
+                                <div class="unit-price-box">
+                                    <span class="price-lbl">Base Price</span>
+                                    <span class="price-amt">₹{u.Base_Price__c}</span>
+                                </div>
+                            </div>
+
+                            <div class="unit-footer">
+                                <template if:true={u.isAvailable}>
+                                    <button class="reserve-btn" onclick={handleOpenReserveModal} data-id={u.Id}>
+                                        <lightning-icon icon-name="utility:lock" size="x-small" variant="inverse"></lightning-icon>
+                                        <span>Reserve (Hold 60m)</span>
+                                    </button>
+                                </template>
+                                <template if:false={u.isAvailable}>
+                                    <button class="disabled-btn" disabled>
+                                        <span>{u.Status__c}</span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:false={hasUnits}>
+                <div class="empty-inventory">
+                    <lightning-icon icon-name="utility:matrix" size="large"></lightning-icon>
+                    <h3>No inventory units found</h3>
+                    <p>Please select an authorized project or adjust your filters.</p>
+                </div>
+            </template>
+        </template>
+
+        <!-- Reserve Modal -->
+        <template if:true={showReserveModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header modal-res-header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseReserveModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium modal-res-title">Confirm Temporary Unit Hold</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <template if:true={selectedUnitForHold}>
+                            <div class="hold-summary-box">
+                                <p>You are about to place a <strong>60-minute exclusivity hold</strong> on:</p>
+                                <div class="hold-card-detail">
+                                    <h3>Unit {selectedUnitForHold.Unit_Number__c}</h3>
+                                    <p>Type: {selectedUnitForHold.Unit_Type__c} • Area: {selectedUnitForHold.Area__c} Sq. Ft.</p>
+                                    <p class="hold-price">Base Price: ₹{selectedUnitForHold.Base_Price__c}</p>
+                                </div>
+                                <p class="hold-warning">⚠️ Note: If booking confirmation is not submitted within 60 minutes, the unit lock will automatically expire and release back to public inventory.</p>
+                            </div>
+                        </template>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={handleCloseReserveModal}>Cancel</button>
+                        <button class="slds-button slds-button_brand" onclick={handleConfirmReservation}>Confirm 60m Hold</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

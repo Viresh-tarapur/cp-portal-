@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rate_Required_For_Percentage</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISPICKVAL(Commission_Type__c, "Percentage"), OR(ISBLANK(Commission_Rate__c), Commission_Rate__c &lt;= 0))</errorConditionFormula>
+    <errorMessage>Commission Rate must be greater than zero for Percentage type.</errorMessage>
+</ValidationRule>

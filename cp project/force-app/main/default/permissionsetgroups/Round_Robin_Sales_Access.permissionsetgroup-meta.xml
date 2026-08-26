@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Aggregates Round Robin Pre-Sales, Inventory, and Post-Sales permission sets.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Round Robin Sales Access</label>
+    <permissionSets>RR_Pre_Sales</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>
+

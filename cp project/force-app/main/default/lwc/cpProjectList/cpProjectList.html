@@ -1,0 +1,80 @@
+<template>
+    <div class="projects-container">
+        <div class="page-title-bar">
+            <div>
+                <h1 class="page-heading">Authorized Projects</h1>
+                <p class="page-sub">Browse residential and commercial real estate projects authorized for your agency.</p>
+            </div>
+            <div class="search-box">
+                <lightning-input
+                    type="search"
+                    placeholder="Search by project name, city, location..."
+                    value={searchKey}
+                    onchange={handleSearchChange}
+                    variant="label-hidden">
+                </lightning-input>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading Projects" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={hasFilteredProjects}>
+                <div class="projects-grid">
+                    <template for:each={filteredProjects} for:item="p">
+                        <div key={p.Id} class="project-card">
+                            <div class="card-media">
+                                <template if:true={p.Banner_Image_URL__c}>
+                                    <img src={p.Banner_Image_URL__c} alt={p.Name} class="project-img"/>
+                                </template>
+                                <template if:false={p.Banner_Image_URL__c}>
+                                    <div class="project-img-placeholder">
+                                        <lightning-icon icon-name="custom:custom24" size="large"></lightning-icon>
+                                    </div>
+                                </template>
+                                <span class="status-chip">{p.Status__c}</span>
+                            </div>
+
+                            <div class="card-body">
+                                <span class="proj-type">{p.Project_Type__c}</span>
+                                <h3 class="proj-title">{p.Name}</h3>
+                                <p class="proj-loc">
+                                    <lightning-icon icon-name="utility:checkin" size="xx-small"></lightning-icon>
+                                    {p.City__c}, {p.Location__c}
+                                </p>
+
+                                <div class="proj-stats-row">
+                                    <div class="stat-col">
+                                        <span class="stat-lbl">Available</span>
+                                        <span class="stat-val">{p.Available_Units__c} Units</span>
+                                    </div>
+                                    <div class="stat-col">
+                                        <span class="stat-lbl">Starting Price</span>
+                                        <span class="stat-val price-val">₹{p.Minimum_Price__c}</span>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer">
+                                    <button class="view-btn" onclick={handleSelectProject} data-id={p.Id}>
+                                        <span>View Project & Inventory</span>
+                                        <lightning-icon icon-name="utility:forward" size="x-small" variant="inverse"></lightning-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:false={hasFilteredProjects}>
+                <div class="empty-projects">
+                    <lightning-icon icon-name="utility:search" size="large"></lightning-icon>
+                    <h3>No projects match your search</h3>
+                    <p>Try refining your search keyword or check back later.</p>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

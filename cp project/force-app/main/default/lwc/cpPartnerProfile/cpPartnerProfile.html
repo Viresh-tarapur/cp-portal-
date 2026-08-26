@@ -1,0 +1,258 @@
+<template>
+    <div class="profile-container">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading Profile..." size="medium"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={partner}>
+                <!-- Top Hero Profile Card -->
+                <div class="profile-hero-card">
+                    <div class="hero-left">
+                        <div class="avatar-box">
+                            <lightning-icon icon-name="standard:channel_programs" size="large"></lightning-icon>
+                        </div>
+                        <div class="hero-info">
+                            <div class="hero-title-row">
+                                <h1 class="partner-name">{partner.Name}</h1>
+                                <span class={tierBadgeClass}>{partner.Partner_Tier__c} Tier</span>
+                            </div>
+                            <div class="hero-meta-row">
+                                <span class="meta-item">
+                                    <lightning-icon icon-name="utility:key" size="xx-small"></lightning-icon>
+                                    <span>Code: <strong>{partner.Partner_Code__c}</strong></span>
+                                </span>
+                                <span class="meta-item">
+                                    <lightning-icon icon-name="utility:company" size="xx-small"></lightning-icon>
+                                    <span>Type: <strong>{partner.Partner_Type__c}</strong></span>
+                                </span>
+                                <span class="meta-item">
+                                    <lightning-icon icon-name="utility:shield" size="xx-small"></lightning-icon>
+                                    <span>KYC: <strong>{partner.KYC_Status__c}</strong></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-right">
+                        <template if:false={isEditing}>
+                            <button class="slds-button slds-button_neutral edit-profile-btn" onclick={handleStartEdit}>
+                                <lightning-icon icon-name="utility:edit" size="x-small"></lightning-icon>
+                                <span>Edit Contact & Bank Details</span>
+                            </button>
+                        </template>
+                        <template if:true={isEditing}>
+                            <div class="edit-btn-group">
+                                <button class="slds-button slds-button_neutral" onclick={handleCancelEdit}>Cancel</button>
+                                <button class="slds-button slds-button_brand" onclick={handleSaveProfile}>Save Changes</button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Main Form & Sections -->
+                <div class="profile-sections-grid">
+                    <!-- General & Contact Information -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <lightning-icon icon-name="utility:contact" size="small"></lightning-icon>
+                            <h2>Contact & Organization Information</h2>
+                        </div>
+                        <div class="section-body">
+                            <div class="info-grid">
+                                <div class="info-field">
+                                    <span class="info-lbl">Official Email</span>
+                                    <span class="info-val">{partner.Email__c}</span>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">Contact Phone</span>
+                                    <template if:false={isEditing}>
+                                        <span class="info-val">{partner.Phone__c}</span>
+                                    </template>
+                                    <template if:true={isEditing}>
+                                        <lightning-input
+                                            type="tel"
+                                            variant="label-hidden"
+                                            value={editForm.Phone__c}
+                                            name="Phone__c"
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </template>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">PAN Number</span>
+                                    <span class="info-val">{partner.PAN_Number__c}</span>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">GST Identification Number (GSTIN)</span>
+                                    <span class="info-val">{partner.GST_Number__c}</span>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">Account Status</span>
+                                    <span class="info-val font-bold">{partner.Status__c}</span>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">Commission Eligible</span>
+                                    <span class="info-val font-bold text-green">{commissionEligibleText}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Banking & Payout Details -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <lightning-icon icon-name="utility:moneybag" size="small"></lightning-icon>
+                            <h2>Disbursement & Bank Account Details</h2>
+                        </div>
+                        <div class="section-body">
+                            <div class="info-grid">
+                                <div class="info-field">
+                                    <span class="info-lbl">Account Holder Name</span>
+                                    <template if:false={isEditing}>
+                                        <span class="info-val">{partner.Account_Holder_Name__c}</span>
+                                    </template>
+                                    <template if:true={isEditing}>
+                                        <lightning-input
+                                            variant="label-hidden"
+                                            value={editForm.Account_Holder_Name__c}
+                                            name="Account_Holder_Name__c"
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </template>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">Bank Name</span>
+                                    <template if:false={isEditing}>
+                                        <span class="info-val">{partner.Bank_Name__c}</span>
+                                    </template>
+                                    <template if:true={isEditing}>
+                                        <lightning-input
+                                            variant="label-hidden"
+                                            value={editForm.Bank_Name__c}
+                                            name="Bank_Name__c"
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </template>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">Account Number</span>
+                                    <template if:false={isEditing}>
+                                        <span class="info-val">{partner.Account_Number__c}</span>
+                                    </template>
+                                    <template if:true={isEditing}>
+                                        <lightning-input
+                                            variant="label-hidden"
+                                            value={editForm.Account_Number__c}
+                                            name="Account_Number__c"
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </template>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">IFSC Code</span>
+                                    <template if:false={isEditing}>
+                                        <span class="info-val">{partner.IFSC_Code__c}</span>
+                                    </template>
+                                    <template if:true={isEditing}>
+                                        <lightning-input
+                                            variant="label-hidden"
+                                            value={editForm.IFSC_Code__c}
+                                            name="IFSC_Code__c"
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </template>
+                                </div>
+                                <div class="info-field full-col">
+                                    <span class="info-lbl">Branch Name</span>
+                                    <template if:false={isEditing}>
+                                        <span class="info-val">{partner.Branch__c}</span>
+                                    </template>
+                                    <template if:true={isEditing}>
+                                        <lightning-input
+                                            variant="label-hidden"
+                                            value={editForm.Branch__c}
+                                            name="Branch__c"
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Billing Address -->
+                    <div class="section-card full-grid-width">
+                        <div class="section-header">
+                            <lightning-icon icon-name="utility:location" size="small"></lightning-icon>
+                            <h2>Registered Business Address</h2>
+                        </div>
+                        <div class="section-body">
+                            <div class="info-grid">
+                                <div class="info-field full-col">
+                                    <span class="info-lbl">Street Address</span>
+                                    <template if:false={isEditing}>
+                                        <span class="info-val">{partner.Billing_Street__c}</span>
+                                    </template>
+                                    <template if:true={isEditing}>
+                                        <lightning-input
+                                            variant="label-hidden"
+                                            value={editForm.Billing_Street__c}
+                                            name="Billing_Street__c"
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </template>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">City</span>
+                                    <template if:false={isEditing}>
+                                        <span class="info-val">{partner.Billing_City__c}</span>
+                                    </template>
+                                    <template if:true={isEditing}>
+                                        <lightning-input
+                                            variant="label-hidden"
+                                            value={editForm.Billing_City__c}
+                                            name="Billing_City__c"
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </template>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">State / Province</span>
+                                    <template if:false={isEditing}>
+                                        <span class="info-val">{partner.Billing_State__c}</span>
+                                    </template>
+                                    <template if:true={isEditing}>
+                                        <lightning-input
+                                            variant="label-hidden"
+                                            value={editForm.Billing_State__c}
+                                            name="Billing_State__c"
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </template>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">Postal / ZIP Code</span>
+                                    <template if:false={isEditing}>
+                                        <span class="info-val">{partner.Billing_PostalCode__c}</span>
+                                    </template>
+                                    <template if:true={isEditing}>
+                                        <lightning-input
+                                            variant="label-hidden"
+                                            value={editForm.Billing_PostalCode__c}
+                                            name="Billing_PostalCode__c"
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </template>
+                                </div>
+                                <div class="info-field">
+                                    <span class="info-lbl">Country</span>
+                                    <span class="info-val">{partner.Billing_Country__c}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

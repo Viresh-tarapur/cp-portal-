@@ -1,0 +1,166 @@
+<template>
+    <div class="lead-reg-container">
+        <template if:true={isLoading}>
+            <div class="spinner-box">
+                <lightning-spinner alternative-text="Registering Lead..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Success Confirmation State -->
+        <template if:true={isRegistered}>
+            <div class="success-screen">
+                <div class="success-icon-badge">
+                    <lightning-icon icon-name="action:approval" size="medium"></lightning-icon>
+                </div>
+                <h2 class="success-heading">Lead Registered & Protected!</h2>
+                <p class="success-sub">Exclusivity lock has been granted. Internal sales team notified.</p>
+
+                <div class="confirmation-card">
+                    <div class="conf-row">
+                        <span class="conf-lbl">Registration Reference</span>
+                        <span class="conf-val">{registrationResponse.registrationNumber}</span>
+                    </div>
+                    <div class="conf-row">
+                        <span class="conf-lbl">Customer Name</span>
+                        <span class="conf-val">{form.customerName}</span>
+                    </div>
+                    <div class="conf-row">
+                        <span class="conf-lbl">Protected Exclusivity Until</span>
+                        <span class="conf-val highlight-date">{formattedProtectionDate}</span>
+                    </div>
+                </div>
+
+                <div class="success-actions">
+                    <button class="slds-button slds-button_brand" onclick={handleDone}>View in My Leads</button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Form State -->
+        <template if:false={isRegistered}>
+            <div class="form-wrapper">
+                <!-- Duplicate warning banner if detected -->
+                <template if:true={duplicateWarning}>
+                    <div class="duplicate-alert">
+                        <lightning-icon icon-name="utility:warning" size="small" variant="warning"></lightning-icon>
+                        <div class="dup-alert-text">
+                            <strong>Conflict Warning:</strong> {duplicateWarning}
+                        </div>
+                    </div>
+                </template>
+
+                <div class="form-grid">
+                    <div class="form-col">
+                        <lightning-input
+                            label="Customer Full Name"
+                            value={form.customerName}
+                            name="customerName"
+                            required
+                            placeholder="e.g. Rahul Sharma"
+                            onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="form-col">
+                        <lightning-input
+                            type="tel"
+                            label="Phone / Mobile"
+                            value={form.phone}
+                            name="phone"
+                            required
+                            placeholder="10-digit mobile number"
+                            onchange={handleInputChange}
+                            onblur={handleDuplicateCheck}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="form-col">
+                        <lightning-input
+                            type="email"
+                            label="Email Address"
+                            value={form.email}
+                            name="email"
+                            placeholder="name@example.com"
+                            onchange={handleInputChange}
+                            onblur={handleDuplicateCheck}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="form-col">
+                        <lightning-combobox
+                            label="Target Project"
+                            name="projectId"
+                            value={form.projectId}
+                            options={projectOptions}
+                            required
+                            placeholder="Select Project"
+                            onchange={handleProjectChange}>
+                        </lightning-combobox>
+                    </div>
+
+                    <div class="form-col">
+                        <lightning-combobox
+                            label="Interested Inventory Unit (Optional)"
+                            name="inventoryUnitId"
+                            value={form.inventoryUnitId}
+                            options={unitOptions}
+                            placeholder="Select specific unit"
+                            disabled={isUnitSelectDisabled}
+                            onchange={handleInputChange}>
+                        </lightning-combobox>
+                    </div>
+
+                    <div class="form-col">
+                        <lightning-input
+                            type="number"
+                            formatter="currency"
+                            label="Customer Budget (₹)"
+                            value={form.budget}
+                            name="budget"
+                            placeholder="e.g. 7500000"
+                            onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="form-col">
+                        <lightning-input
+                            label="Unit Requirement / Configuration"
+                            value={form.requirement}
+                            name="requirement"
+                            placeholder="e.g. 3BHK East Facing High Floor"
+                            onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="form-col">
+                        <lightning-input
+                            type="date"
+                            label="Expected Purchase Date"
+                            value={form.expectedPurchaseDate}
+                            name="expectedPurchaseDate"
+                            onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+                </div>
+
+                <div class="form-full-row slds-m-top_small">
+                    <lightning-textarea
+                        label="Special Client Notes / Interaction Details"
+                        value={form.notes}
+                        name="notes"
+                        placeholder="Add any specific preferences, financing needs, or background..."
+                        onchange={handleInputChange}>
+                    </lightning-textarea>
+                </div>
+
+                <div class="form-footer slds-m-top_large">
+                    <button class="slds-button slds-button_neutral" onclick={handleCancel}>Cancel</button>
+                    <button class="submit-btn" onclick={handleSubmitLead} disabled={isSubmitDisabled}>
+                        <lightning-icon icon-name="utility:lock" size="x-small" variant="inverse"></lightning-icon>
+                        <span>Submit & Lock Protection</span>
+                    </button>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <description>Initializes protection dates and sets active exclusivity on new Lead Registrations.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>DefaultEndDate</name>
+        <dataType>Date</dataType>
+        <expression>{!$Flow.CurrentDate} + 90</expression>
+    </formulas>
+    <interviewLabel>CP Lead Protection Initialization {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>CP Lead Protection Initialization</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Set_Protection_Defaults</name>
+        <label>Set Protection Defaults</label>
+        <locationX>150</locationX>
+        <locationY>250</locationY>
+        <inputAssignments>
+            <field>Ownership_Status__c</field>
+            <value>
+                <stringValue>Protected</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Protection_End_Date__c</field>
+            <value>
+                <elementReference>DefaultEndDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Protection_Start_Date__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Registration_Status__c</field>
+            <value>
+                <stringValue>Accepted</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Set_Protection_Defaults</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Protection_End_Date__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Lead_Registration__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

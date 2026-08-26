@@ -1,0 +1,103 @@
+<template>
+    <div class="site-visit-form-wrap">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Scheduling Visit" size="medium"></lightning-spinner>
+        </template>
+
+        <div class="form-grid">
+            <div class="form-col">
+                <lightning-input
+                    label="Customer Full Name"
+                    value={form.customerName}
+                    name="customerName"
+                    required
+                    onchange={handleInputChange}>
+                </lightning-input>
+            </div>
+
+            <div class="form-col">
+                <lightning-input
+                    type="tel"
+                    label="Contact Phone"
+                    value={form.customerPhone}
+                    name="customerPhone"
+                    required
+                    onchange={handleInputChange}>
+                </lightning-input>
+            </div>
+
+            <div class="form-col">
+                <lightning-input
+                    type="email"
+                    label="Email Address"
+                    value={form.customerEmail}
+                    name="customerEmail"
+                    onchange={handleInputChange}>
+                </lightning-input>
+            </div>
+
+            <div class="form-col">
+                <lightning-combobox
+                    label="Target Project"
+                    name="projectId"
+                    value={form.projectId}
+                    options={projectOptions}
+                    required
+                    onchange={handleInputChange}>
+                </lightning-combobox>
+            </div>
+
+            <div class="form-col">
+                <lightning-input
+                    type="date"
+                    label="Visit Date"
+                    value={form.visitDate}
+                    name="visitDate"
+                    min={minDate}
+                    required
+                    onchange={handleInputChange}>
+                </lightning-input>
+            </div>
+
+            <div class="form-col">
+                <lightning-combobox
+                    label="Preferred Time Slot"
+                    name="visitTime"
+                    value={form.visitTime}
+                    options={timeSlotOptions}
+                    required
+                    onchange={handleInputChange}>
+                </lightning-combobox>
+            </div>
+
+            <div class="form-col">
+                <lightning-input
+                    type="number"
+                    label="Number of Visitors"
+                    value={form.numberOfVisitors}
+                    name="numberOfVisitors"
+                    min="1"
+                    max="10"
+                    onchange={handleInputChange}>
+                </lightning-input>
+            </div>
+        </div>
+
+        <div class="slds-m-top_small">
+            <lightning-textarea
+                label="Visit Notes / Instructions"
+                value={form.remarks}
+                name="remarks"
+                placeholder="Specific focus areas, family preferences, pickup requirements..."
+                onchange={handleInputChange}>
+            </lightning-textarea>
+        </div>
+
+        <div class="form-footer slds-m-top_large">
+            <button class="slds-button slds-button_neutral" onclick={handleCancel}>Cancel</button>
+            <button class="slds-button slds-button_brand" onclick={handleSubmitVisit} disabled={isSubmitDisabled}>
+                Confirm Site Visit
+            </button>
+        </div>
+    </div>
+</template>

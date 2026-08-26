@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Registration_Payment_Gate_Check</fullName>
+    <active>true</active>
+    <description>Registration Gate Violation: For Home Loan customers, DD copy must be uploaded, DD Reference populated, and Legal Approval granted. For Self-Payment customers, all dues must be cleared (0 outstanding dues), receipts approved, and Legal Approval granted.</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Status__c, &quot;Registered&quot;),
+    OR(
+        AND(
+            OR(ISPICKVAL(Booking__r.Funding_Type__c, &quot;Home Loan&quot;), ISPICKVAL(Booking__r.Funding_Type__c, &quot;Part Self + Part Loan&quot;), ISPICKVAL(Booking__r.Funding_Type__c, &quot;Loan&quot;)),
+            OR(NOT(DD_Uploaded__c), ISBLANK(DD_Reference__c), NOT(Legal_Approval__c))
+        ),
+        AND(
+            OR(ISPICKVAL(Booking__r.Funding_Type__c, &quot;Self Payment&quot;), ISPICKVAL(Booking__r.Funding_Type__c, &quot;Self-Funded&quot;)),
+            OR(Booking__r.Pending_Dues__c &gt; 0, Booking__r.Is_Locked__c, NOT(Legal_Approval__c))
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Registration Gate Violation: For Home Loan customers, DD copy must be uploaded, DD Reference populated, and Legal Approval granted. For Self-Payment customers, all dues must be cleared (0 outstanding dues), receipts approved, and Legal Approval granted.</errorMessage>
+</ValidationRule>

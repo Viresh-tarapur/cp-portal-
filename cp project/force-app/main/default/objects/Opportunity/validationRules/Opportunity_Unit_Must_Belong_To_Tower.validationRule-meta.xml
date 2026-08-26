@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Unit_Must_Belong_To_Tower</fullName>
+    <active>true</active>
+    <description>Ensures that the selected Unit belongs to the selected Tower on Opportunity.</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Tower__c)),
+    NOT(ISBLANK(Unit__c)),
+    Unit__r.Tower__c != Tower__c
+)</errorConditionFormula>
+    <errorDisplayField>Unit__c</errorDisplayField>
+    <errorMessage>Selected Unit does not belong to the selected Tower.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,318 @@
+.leads-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* 1. Header Card */
+.sf-page-header {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.sf-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.sf-header-title-block {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sf-title-text-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.sf-object-name {
+    font-size: 0.75rem;
+    color: #4b5563;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.sf-header-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0.2rem 0 0 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sf-dropdown-arrow {
+    font-size: 0.75rem;
+    color: #6b7280;
+    cursor: pointer;
+}
+
+.sf-pin-icon {
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-left: 0.25rem;
+}
+
+.sf-header-meta {
+    margin-top: 0.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.meta-text {
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* 3. Toolbar Card */
+.sf-toolbar-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.sf-search-input {
+    min-width: 280px;
+}
+
+.filter-pills {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.pill-btn {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 9999px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.pill-btn:hover {
+    background: #e5e7eb;
+}
+
+.pill-btn.active {
+    background: #1f2937;
+    color: #ffffff;
+    border-color: #1f2937;
+}
+
+/* 4. Table Card & Design */
+.sf-table-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.sf-leads-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.sf-leads-table th {
+    background: #f9fafb;
+    color: #374151;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    padding: 0.75rem 0.85rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+}
+
+.sf-leads-table td {
+    padding: 0.75rem 0.85rem;
+    border-bottom: 1px solid #f3f4f6;
+    color: #1f2937;
+    vertical-align: middle;
+}
+
+.cb-col {
+    width: 36px;
+    text-align: center;
+}
+
+.sf-lead-link {
+    color: #0176d3;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.sf-lead-link:hover {
+    text-decoration: underline;
+}
+
+.phone-text {
+    color: #111827;
+    font-weight: 500;
+}
+
+.email-text {
+    color: #4b5563;
+}
+
+/* 6. Assigned To Color Pills */
+.owner-pill {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.owner-pill-se1 {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+.owner-pill-se2 {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.owner-pill-se3 {
+    background: #fef9c3;
+    color: #a16207;
+    border: 1px solid #fef08a;
+}
+
+.owner-pill-se4 {
+    background: #f3e8ff;
+    color: #6b21a8;
+    border: 1px solid #e9d5ff;
+}
+
+/* 7. Duplicate Badge [D] */
+.badge-same-owner-dup {
+    background: #ff5c5c;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-weight: 800;
+    font-size: 11px;
+    display: inline-block;
+    cursor: help;
+}
+
+.no-dup-text {
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+.action-cell-btns {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.icon-action-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.icon-action-btn:hover {
+    background: #f3f4f6;
+}
+
+.empty-leads {
+    text-align: center;
+    padding: 3.5rem 2rem;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px dashed #d1d5db;
+}
+
+/* Modal details */
+.modal-detail-header {
+    background: #111827;
+    color: #ffffff;
+}
+
+.modal-detail-title {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.modal-detail-code {
+    color: #9ca3af;
+    font-size: 0.82rem;
+}
+
+.lead-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+}
+
+.detail-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-lbl {
+    font-size: 0.72rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.detail-val {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 0.2rem;
+}
+
+.highlight-blue {
+    color: #0176d3;
+    font-weight: 800;
+}
+
+.notes-box {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.notes-box p {
+    margin-top: 0.35rem;
+    color: #374151;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}

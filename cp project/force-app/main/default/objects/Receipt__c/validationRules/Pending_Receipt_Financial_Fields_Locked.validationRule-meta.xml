@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pending_Receipt_Financial_Fields_Locked</fullName>
+    <active>true</active>
+    <description>Only the approval decision can change a pending receipt.</description>
+    <errorConditionFormula>AND(NOT(ISNEW()), ISPICKVAL(PRIORVALUE(Receipt_Status__c), &quot;Pending Approval&quot;), OR(ISCHANGED(Amount__c), ISCHANGED(Booking__c), ISCHANGED(Payment__c), ISCHANGED(Payment_Mode__c), ISCHANGED(Receipt_Date__c), ISCHANGED(Transaction_Reference__c)))</errorConditionFormula>
+    <errorMessage>Pending approval receipts are locked. Submit an approval decision before changing financial details.</errorMessage>
+</ValidationRule>

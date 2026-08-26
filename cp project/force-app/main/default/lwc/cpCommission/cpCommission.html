@@ -1,0 +1,101 @@
+<template>
+    <div class="commission-container">
+        <div class="page-title-bar">
+            <div>
+                <h1 class="page-heading">Partner Commission Ledger</h1>
+                <p class="page-sub">Transparent tracking of earned deals, tax deductions, and ERP disbursement status.</p>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading Commissions" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <!-- Summary Financial Cards -->
+            <div class="comm-summary-grid">
+                <div class="summary-card card-earned">
+                    <div class="summary-icon bg-green">
+                        <lightning-icon icon-name="utility:moneybag" size="medium" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="summary-info">
+                        <span class="summary-lbl">Earned Commission (Approved)</span>
+                        <span class="summary-val">₹{formattedEarned}</span>
+                        <span class="summary-sub">{summary.approvedCount} Bookings Approved</span>
+                    </div>
+                </div>
+
+                <div class="summary-card card-pending">
+                    <div class="summary-icon bg-amber">
+                        <lightning-icon icon-name="utility:clock" size="medium" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="summary-info">
+                        <span class="summary-lbl">Pending Finance Approval</span>
+                        <span class="summary-val">₹{formattedPending}</span>
+                        <span class="summary-sub">Under Verification</span>
+                    </div>
+                </div>
+
+                <div class="summary-card card-paid">
+                    <div class="summary-icon bg-blue">
+                        <lightning-icon icon-name="utility:check" size="medium" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="summary-info">
+                        <span class="summary-lbl">Total Disbursed (Paid)</span>
+                        <span class="summary-val">₹{formattedPaid}</span>
+                        <span class="summary-sub">{summary.paidCount} Payouts Completed</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Transactions Datatable -->
+            <template if:true={hasCommissions}>
+                <div class="table-card slds-m-top_large">
+                    <div class="table-header">
+                        <h2>Commission Transactions History</h2>
+                    </div>
+                    <div class="slds-scrollable_x">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Comm. Ref</th>
+                                    <th>Project</th>
+                                    <th>Deal Value</th>
+                                    <th>Gross (₹)</th>
+                                    <th>TDS (5%)</th>
+                                    <th>Net Payable</th>
+                                    <th>Eligibility</th>
+                                    <th>Approval</th>
+                                    <th>Payment Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={commissions} for:item="c">
+                                    <tr key={c.Id}>
+                                        <td class="font-bold text-blue">{c.Name}</td>
+                                        <td>{c.Project__r.Name}</td>
+                                        <td>₹{c.Property_Value__c}</td>
+                                        <td>₹{c.Gross_Commission__c}</td>
+                                        <td class="text-rose">-₹{c.Tax_Deduction__c}</td>
+                                        <td class="font-bold text-green">₹{c.Net_Commission__c}</td>
+                                        <td><span class="status-pill status-eligible">{c.Eligibility_Status__c}</span></td>
+                                        <td><span class={c.approvalBadgeClass}>{c.Approval_Status__c}</span></td>
+                                        <td><span class={c.paymentBadgeClass}>{c.Payment_Status__c}</span></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
+
+            <template if:false={hasCommissions}>
+                <div class="empty-state-box slds-m-top_large">
+                    <lightning-icon icon-name="utility:money" size="large"></lightning-icon>
+                    <h3>No Commission Records Found</h3>
+                    <p>Commissions are generated automatically when a registered lead's unit booking is confirmed and payment is verified.</p>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

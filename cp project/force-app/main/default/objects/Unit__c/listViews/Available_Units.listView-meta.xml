@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Available_Units</fullName>
+    <columns>NAME</columns>
+    <columns>Project__c</columns>
+    <columns>Tower__c</columns>
+    <columns>Floor__c</columns>
+    <columns>Configuration__c</columns>
+    <columns>Area__c</columns>
+    <columns>Facing__c</columns>
+    <columns>Price__c</columns>
+    <columns>Availability__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Availability__c</field>
+        <operation>equals</operation>
+        <value>Available</value>
+    </filters>
+    <label>Available Units</label>
+</ListView>

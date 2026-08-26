@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CP_Lead_Email_Format</fullName>
+    <active>true</active>
+    <description>Validates email format for CP Email and Customer Email when provided on CP leads</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(LeadSource, &apos;Channel Partner&apos;),
+    OR(
+        AND(
+            NOT(ISBLANK(CP_Email__c)),
+            NOT(REGEX(CP_Email__c, &apos;^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$&apos;))
+        ),
+        AND(
+            NOT(ISBLANK(Email)),
+            NOT(REGEX(Email, &apos;^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$&apos;))
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Please provide a valid email address format.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,249 @@
+<template>
+    <div class="dashboard-wrapper">
+        <template if:true={isLoading}>
+            <div class="spinner-container">
+                <lightning-spinner alternative-text="Loading Partner Dashboard" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <!-- Hero Welcome Card -->
+            <div class="hero-card">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="tier-pill-row">
+                            <span class={tierBadgeClass}>{partnerTier} PARTNER</span>
+                            <span class={kycBadgeClass}>KYC: {partnerKycStatus}</span>
+                        </div>
+                        <h1 class="hero-greeting">Welcome back, {partnerName}!</h1>
+                        <p class="hero-desc">Manage your registered leads, inventory allocations, site visits, and commission payouts in real time.</p>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="action-btn-primary" onclick={handleQuickRegisterLead}>
+                            <lightning-icon icon-name="utility:add" size="x-small" variant="inverse"></lightning-icon>
+                            <span>Register Lead</span>
+                        </button>
+                        <button class="action-btn-secondary" onclick={handleNavProjects}>
+                            <lightning-icon icon-name="utility:preview" size="x-small"></lightning-icon>
+                            <span>Browse Projects</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI Metric Statistics Cards -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon-box bg-blue">
+                        <lightning-icon icon-name="utility:lead" size="small" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Total Leads</span>
+                        <span class="metric-value">{metrics.totalLeads}</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon-box bg-emerald">
+                        <lightning-icon icon-name="utility:approval" size="small" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Qualified Leads</span>
+                        <span class="metric-value">{metrics.qualifiedLeads}</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon-box bg-amber">
+                        <lightning-icon icon-name="utility:event" size="small" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Upcoming Visits</span>
+                        <span class="metric-value">{metrics.upcomingSiteVisits}</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon-box bg-purple">
+                        <lightning-icon icon-name="utility:contract" size="small" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Total Bookings</span>
+                        <span class="metric-value">{metrics.totalBookings}</span>
+                    </div>
+                </div>
+
+                <div class="metric-card highlight-card">
+                    <div class="metric-icon-box bg-green">
+                        <lightning-icon icon-name="utility:moneybag" size="small" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Commission Earned</span>
+                        <span class="metric-value currency-text">₹{formattedEarnedCommission}</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon-box bg-rose">
+                        <lightning-icon icon-name="utility:clock" size="small" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Pending Approval</span>
+                        <span class="metric-value currency-text">₹{formattedPendingCommission}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two-Column Main Content Section -->
+            <div class="dashboard-columns">
+                <!-- Left Column: Projects & Recent Leads -->
+                <div class="col-main">
+                    <!-- Authorized Projects Grid -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <div class="section-title-wrap">
+                                <lightning-icon icon-name="utility:company" size="small"></lightning-icon>
+                                <h2>Authorized Projects</h2>
+                            </div>
+                            <button class="link-btn" onclick={handleNavProjects}>View All ({authorizedProjectsCount})</button>
+                        </div>
+                        <template if:true={hasProjects}>
+                            <div class="project-mini-grid">
+                                <template for:each={metrics.authorizedProjects} for:item="proj">
+                                    <div key={proj.Id} class="project-mini-card">
+                                        <div class="proj-header">
+                                            <span class="proj-name">{proj.Name}</span>
+                                            <span class="proj-badge">{proj.Status__c}</span>
+                                        </div>
+                                        <div class="proj-details">
+                                            <p class="proj-loc"><lightning-icon icon-name="utility:checkin" size="xx-small"></lightning-icon> {proj.City__c}, {proj.Location__c}</p>
+                                            <div class="proj-stats">
+                                                <span>Available Units: <strong>{proj.Available_Units__c}</strong></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template if:false={hasProjects}>
+                            <div class="empty-state">
+                                <lightning-icon icon-name="utility:info" size="medium"></lightning-icon>
+                                <p>No authorized projects assigned to your account yet.</p>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Recent Leads Table -->
+                    <div class="section-card slds-m-top_large">
+                        <div class="section-header">
+                            <div class="section-title-wrap">
+                                <lightning-icon icon-name="utility:lead" size="small"></lightning-icon>
+                                <h2>Recent Registered Leads</h2>
+                            </div>
+                            <button class="link-btn" onclick={handleNavLeads}>View All Leads</button>
+                        </div>
+                        <template if:true={hasLeads}>
+                            <div class="slds-scrollable_x">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer Name</th>
+                                            <th>Project</th>
+                                            <th>Phone</th>
+                                            <th>Status</th>
+                                            <th>Ownership</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={metrics.recentLeads} for:item="lead">
+                                            <tr key={lead.Id}>
+                                                <td class="font-bold">{lead.Customer_Name__c}</td>
+                                                <td>{lead.Project__r.Name}</td>
+                                                <td>{lead.Customer_Phone__c}</td>
+                                                <td><span class="status-pill status-accepted">{lead.Registration_Status__c}</span></td>
+                                                <td><span class="status-pill status-protected">{lead.Ownership_Status__c}</span></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+                        <template if:false={hasLeads}>
+                            <div class="empty-state">
+                                <p>No leads registered yet. Click "Register Lead" to get started.</p>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Right Column: Upcoming Visits & Recent Earnings -->
+                <div class="col-side">
+                    <!-- Upcoming Site Visits -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <div class="section-title-wrap">
+                                <lightning-icon icon-name="utility:event" size="small"></lightning-icon>
+                                <h2>Upcoming Site Visits</h2>
+                            </div>
+                            <button class="link-btn" onclick={handleNavVisits}>View All</button>
+                        </div>
+                        <template if:true={hasUpcomingVisits}>
+                            <div class="visits-list">
+                                <template for:each={metrics.upcomingVisits} for:item="visit">
+                                    <div key={visit.Id} class="visit-item">
+                                        <div class="visit-date-badge">
+                                            <span class="v-date">{visit.Visit_Date__c}</span>
+                                            <span class="v-time">{visit.Visit_Time__c}</span>
+                                        </div>
+                                        <div class="visit-info">
+                                            <h4 class="v-cust">{visit.Customer_Name__c}</h4>
+                                            <p class="v-proj">{visit.Project__r.Name}</p>
+                                            <span class="status-pill status-confirmed">{visit.Status__c}</span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template if:false={hasUpcomingVisits}>
+                            <div class="empty-state">
+                                <p>No upcoming site visits scheduled.</p>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Recent Commissions -->
+                    <div class="section-card slds-m-top_large">
+                        <div class="section-header">
+                            <div class="section-title-wrap">
+                                <lightning-icon icon-name="utility:money" size="small"></lightning-icon>
+                                <h2>Recent Commissions</h2>
+                            </div>
+                            <button class="link-btn" onclick={handleNavCommissions}>View All</button>
+                        </div>
+                        <template if:true={hasCommissions}>
+                            <div class="comm-list">
+                                <template for:each={metrics.recentCommissions} for:item="comm">
+                                    <div key={comm.Id} class="comm-item">
+                                        <div class="comm-info">
+                                            <span class="comm-name">{comm.Name}</span>
+                                            <span class="comm-proj">{comm.Project__r.Name}</span>
+                                        </div>
+                                        <div class="comm-amount-box">
+                                            <span class="comm-amount">₹{comm.Net_Commission__c}</span>
+                                            <span class="status-pill status-approved">{comm.Approval_Status__c}</span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template if:false={hasCommissions}>
+                            <div class="empty-state">
+                                <p>No commission transactions logged yet.</p>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

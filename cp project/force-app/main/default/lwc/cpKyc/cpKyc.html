@@ -1,0 +1,220 @@
+<template>
+    <div class="kyc-container">
+        <!-- Page Title & Header -->
+        <div class="page-title-bar">
+            <div>
+                <h1 class="page-heading">KYC Verification & Compliance</h1>
+                <p class="page-sub">Upload regulatory, identity, and banking documents for compliance verification and commission disbursement.</p>
+            </div>
+            <div class="status-summary-box">
+                <span class="status-title">KYC Compliance Status</span>
+                <span class={overallKycBadgeClass}>{overallKycStatus}</span>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading KYC Status..." size="medium"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <!-- KYC Info / Alert Banner -->
+            <template if:true={isKycPending}>
+                <div class="alert-banner banner-warning">
+                    <lightning-icon icon-name="utility:warning" size="small" variant="warning"></lightning-icon>
+                    <div class="alert-content">
+                        <strong>KYC Verification Required:</strong>
+                        <span>Please upload your PAN card and Bank Proof to unlock commission payouts and full project marketing collateral.</span>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={isKycUnderReview}>
+                <div class="alert-banner banner-info">
+                    <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                    <div class="alert-content">
+                        <strong>Documents Under Review:</strong>
+                        <span>Your submitted documents are currently being verified by the Channel Management team. Typically processed within 24 hours.</span>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={isKycApproved}>
+                <div class="alert-banner banner-success">
+                    <lightning-icon icon-name="utility:success" size="small" variant="inverse"></lightning-icon>
+                    <div class="alert-content">
+                        <strong>KYC Verified:</strong>
+                        <span>Your partner profile is fully compliant and eligible for automatic commission calculations and ERP payouts.</span>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Document Upload & Checklist Section -->
+            <div class="kyc-grid">
+                <!-- Upload New Document Card -->
+                <div class="kyc-card upload-card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="utility:upload" size="small"></lightning-icon>
+                        <h2>Submit Compliance Document</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <lightning-combobox
+                                label="Document Type"
+                                name="docType"
+                                value={newDoc.docType}
+                                placeholder="Select Document Type"
+                                options={docTypeOptions}
+                                required
+                                onchange={handleDocTypeChange}>
+                            </lightning-combobox>
+                        </div>
+                        <div class="form-group">
+                            <lightning-input
+                                label="Document / Identifier Number"
+                                name="docNumber"
+                                placeholder="e.g. PAN Number, GSTIN, Account No."
+                                value={newDoc.docNumber}
+                                onchange={handleDocNumberChange}>
+                            </lightning-input>
+                        </div>
+                        <div class="form-group">
+                            <label class="custom-file-label">Upload Document File (PDF, PNG, JPG)</label>
+                            <lightning-file-upload
+                                label="Attach File"
+                                name="fileUploader"
+                                accept={acceptedFormats}
+                                record-id={partnerId}
+                                onuploadfinished={handleUploadFinished}>
+                            </lightning-file-upload>
+                            <template if:true={uploadedFileName}>
+                                <div class="file-success-pill">
+                                    <lightning-icon icon-name="utility:check" size="xx-small"></lightning-icon>
+                                    <span>Attached: {uploadedFileName}</span>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="form-action-row">
+                            <button
+                                class="slds-button slds-button_brand submit-doc-btn"
+                                disabled={isSubmitDisabled}
+                                onclick={handleSubmitDocument}>
+                                Submit for Verification
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KYC Required Checklist Status -->
+                <div class="kyc-card checklist-card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="utility:task" size="small"></lightning-icon>
+                        <h2>Required Verification Checklist</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="checklist-item">
+                            <div class="chk-left">
+                                <span class={panStatusIconClass}></span>
+                                <div class="chk-text">
+                                    <span class="chk-title">PAN Card</span>
+                                    <span class="chk-desc">Mandatory for TDS calculation & tax filing.</span>
+                                </div>
+                            </div>
+                            <span class={panBadgeClass}>{panStatusText}</span>
+                        </div>
+
+                        <div class="checklist-item">
+                            <div class="chk-left">
+                                <span class={bankStatusIconClass}></span>
+                                <div class="chk-text">
+                                    <span class="chk-title">Bank Proof / Cancelled Cheque</span>
+                                    <span class="chk-desc">Mandatory for commission NEFT/RTGS payouts.</span>
+                                </div>
+                            </div>
+                            <span class={bankBadgeClass}>{bankStatusText}</span>
+                        </div>
+
+                        <div class="checklist-item">
+                            <div class="chk-left">
+                                <span class={gstStatusIconClass}></span>
+                                <div class="chk-text">
+                                    <span class="chk-title">GST Registration</span>
+                                    <span class="chk-desc">Required for claiming 18% GST on commissions.</span>
+                                </div>
+                            </div>
+                            <span class={gstBadgeClass}>{gstStatusText}</span>
+                        </div>
+
+                        <div class="checklist-item">
+                            <div class="chk-left">
+                                <span class={reraStatusIconClass}></span>
+                                <div class="chk-text">
+                                    <span class="chk-title">RERA Real Estate Agent License</span>
+                                    <span class="chk-desc">Required for Gold/Platinum tier partner incentives.</span>
+                                </div>
+                            </div>
+                            <span class={reraBadgeClass}>{reraStatusText}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Uploaded Documents History Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h2>Uploaded Verification History</h2>
+                </div>
+                <template if:true={hasDocuments}>
+                    <div class="slds-scrollable_x">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Ref #</th>
+                                    <th>Document Type</th>
+                                    <th>Identifier No.</th>
+                                    <th>File Name</th>
+                                    <th>Uploaded Date</th>
+                                    <th>Verification Status</th>
+                                    <th>Remarks / Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={documents} for:item="doc">
+                                    <tr key={doc.Id}>
+                                        <td class="font-bold text-blue">{doc.Name}</td>
+                                        <td><strong>{doc.Document_Type__c}</strong></td>
+                                        <td>{doc.Document_Number__c}</td>
+                                        <td>
+                                            <div class="file-name-cell">
+                                                <lightning-icon icon-name="doctype:attachment" size="xx-small"></lightning-icon>
+                                                <span>{doc.File_Name__c}</span>
+                                            </div>
+                                        </td>
+                                        <td>{doc.formattedDate}</td>
+                                        <td>
+                                            <span class={doc.statusBadgeClass}>{doc.Document_Status__c}</span>
+                                        </td>
+                                        <td>
+                                            <template if:true={doc.Rejection_Reason__c}>
+                                                <span class="rejection-text">{doc.Rejection_Reason__c}</span>
+                                            </template>
+                                            <template if:false={doc.Rejection_Reason__c}>
+                                                <span class="text-muted">—</span>
+                                            </template>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+                <template if:false={hasDocuments}>
+                    <div class="empty-state">
+                        <lightning-icon icon-name="utility:file" size="large"></lightning-icon>
+                        <p class="empty-title">No KYC Documents Uploaded Yet</p>
+                        <p class="empty-desc">Use the form above to upload your compliance certificates.</p>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>

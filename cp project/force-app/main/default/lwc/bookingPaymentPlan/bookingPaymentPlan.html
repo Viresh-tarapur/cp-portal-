@@ -1,0 +1,282 @@
+<template>
+    <lightning-card title="Payment Plan Manager" icon-name="custom:custom17">
+        <div class="slds-p-around_medium">
+            <!-- Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <!-- Error message display -->
+            <template if:true={errorMessage}>
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error slds-m-bottom_medium" role="alert">
+                    <span class="slds-assistive-text">error</span>
+                    <h2>{errorMessage}</h2>
+                </div>
+            </template>
+
+            <!-- 1. NOT ACTIVATED STATE: Configuration / Setup UI -->
+            <template if:false={isActivated}>
+                <template if:true={hasModifyAccess}>
+                    <template if:false={isConfiguring}>
+                        <div class="slds-align_absolute-center slds-p-vertical_large">
+                            <lightning-button 
+                                variant="brand" 
+                                label="Set Payment Plan" 
+                                onclick={handleStartConfig}
+                                class="set-plan-btn">
+                            </lightning-button>
+                        </div>
+                    </template>
+                </template>
+                <template if:false={hasModifyAccess}>
+                    <div class="slds-align_absolute-center slds-p-vertical_large slds-text-color_weak">
+                        No active payment plan. You do not have permission to configure a payment plan.
+                    </div>
+                </template>
+
+                <template if:true={isConfiguring}>
+                    <div class="slds-form slds-m-bottom_medium">
+                        <!-- Total Property/Plot Amount Input -->
+                        <div class="slds-form-element slds-m-bottom_small">
+                            <lightning-input 
+                                type="number" 
+                                label="Total Property/Plot Amount" 
+                                value={totalAmount} 
+                                formatter="currency"
+                                step="0.01"
+                                min="0.01"
+                                required
+                                onchange={handleAmountChange}>
+                            </lightning-input>
+                        </div>
+
+                        <!-- Payment Plan Type Select -->
+                        <div class="slds-form-element slds-m-bottom_small">
+                            <lightning-combobox
+                                name="planType"
+                                label="Payment Plan Type"
+                                value={planType}
+                                options={planOptions}
+                                onchange={handlePlanTypeChange}
+                                required>
+                            </lightning-combobox>
+                        </div>
+
+                        <!-- Number of Months (Only if Monthly Payment) -->
+                        <template if:true={isMonthly}>
+                            <div class="slds-form-element slds-m-bottom_small">
+                                <lightning-input 
+                                    type="number" 
+                                    label="Number of Months" 
+                                    value={months} 
+                                    min="1"
+                                    step="1"
+                                    required
+                                    onchange={handleMonthsChange}>
+                                </lightning-input>
+                            </div>
+                            <!-- Monthly Installment Preview -->
+                            <div class="slds-m-bottom_small slds-p-around_x-small slds-theme_shade slds-border_left slds-theme_alert-texture">
+                                <strong>Calculated Monthly Installment: </strong>
+                                <span class="slds-text-color_success">
+                                    <lightning-formatted-number value={monthlyInstallment} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                </span>
+                            </div>
+                        </template>
+
+                        <!-- Preview Schedules Area -->
+                        <template if:true={schedulePreview.length}>
+                            <div class="slds-m-vertical_medium">
+                                <div class="slds-text-heading_small slds-m-bottom_small">Payment Schedule Preview</div>
+                                <div class="slds-scrollable_y" style="max-height: 250px;">
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th scope="col"><div class="slds-truncate" title="Installment">Inst. #</div></th>
+                                                <th scope="col"><div class="slds-truncate" title="Milestone">Milestone</div></th>
+                                                <th scope="col"><div class="slds-truncate" title="Amount">Amount</div></th>
+                                                <th scope="col"><div class="slds-truncate" title="Due Date">Due Date</div></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={schedulePreview} for:item="inst">
+                                                <tr key={inst.installmentNumber} class="slds-hint-parent">
+                                                    <td><div class="slds-truncate">{inst.installmentNumber}</div></td>
+                                                    <td><div class="slds-truncate">{inst.milestoneName}</div></td>
+                                                    <td>
+                                                        <div class="slds-truncate">
+                                                            <lightning-formatted-number value={inst.amount} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="slds-truncate">
+                                                            <lightning-formatted-date-time value={inst.dueDate}></lightning-formatted-date-time>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Buttons -->
+                        <div class="slds-m-top_medium slds-text-align_right">
+                            <lightning-button label="Cancel" onclick={handleCancelConfig} class="slds-m-right_small"></lightning-button>
+                            <lightning-button label="Confirm & Activate Plan" variant="brand" onclick={handleActivatePlan} disabled={isActivateDisabled}></lightning-button>
+                        </div>
+                    </div>
+                </template>
+            </template>
+
+            <!-- 2. ACTIVATED STATE: Display Information -->
+            <template if:true={isActivated}>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Key Amounts -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                        <div class="slds-border_bottom slds-p-vertical_xx-small">
+                            <span class="slds-text-title_caps">Total Property/Plot Amount</span>
+                            <div class="slds-text-heading_small">
+                                <lightning-formatted-number value={booking.Total_Property_Plot_Amount__c} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                        <div class="slds-border_bottom slds-p-vertical_xx-small">
+                            <span class="slds-text-title_caps">Booking Amount</span>
+                            <div class="slds-text-heading_small">
+                                <lightning-formatted-number value={booking.Booking_Amount__c} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Plan Configurations -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                        <div class="slds-border_bottom slds-p-vertical_xx-small">
+                            <span class="slds-text-title_caps">Payment Plan Type</span>
+                            <div class="slds-text-heading_small">{booking.Payment_Plan_Type__c}</div>
+                        </div>
+                    </div>
+                    <template if:true={isMonthlyPlanActivated}>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <div class="slds-border_bottom slds-p-vertical_xx-small">
+                                <span class="slds-text-title_caps">Number of Months</span>
+                                <div class="slds-text-heading_small">{booking.Payment_Plan_Months__c} Months</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <div class="slds-border_bottom slds-p-vertical_xx-small">
+                                <span class="slds-text-title_caps">Monthly Installment</span>
+                                <div class="slds-text-heading_small">
+                                    <lightning-formatted-number value={booking.Monthly_Installment__c} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Real-Time Metrics -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                        <div class="slds-border_bottom slds-p-vertical_xx-small">
+                            <span class="slds-text-title_caps">Total Demanded</span>
+                            <div class="slds-text-heading_small">
+                                <lightning-formatted-number value={booking.Total_Demanded__c} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                        <div class="slds-border_bottom slds-p-vertical_xx-small">
+                            <span class="slds-text-title_caps">Total Cleared Amount</span>
+                            <div class="slds-text-heading_small">
+                                <lightning-formatted-number value={booking.Total_Paid__c} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                        <div class="slds-border_bottom slds-p-vertical_xx-small">
+                            <span class="slds-text-title_caps">Outstanding Amount</span>
+                            <div class="slds-text-heading_small">
+                                <lightning-formatted-number value={booking.Outstanding_Amount__c} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Next Payment Dues -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                        <div class="slds-border_bottom slds-p-vertical_xx-small">
+                            <span class="slds-text-title_caps">Next Payment Amount</span>
+                            <div class="slds-text-heading_small">
+                                <lightning-formatted-number value={booking.Next_Payment_Amount__c} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                        <div class="slds-border_bottom slds-p-vertical_xx-small">
+                            <span class="slds-text-title_caps">Next Payment Date</span>
+                            <div class="slds-text-heading_small">
+                                <lightning-formatted-date-time value={booking.Next_Payment_Date__c}></lightning-formatted-date-time>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                        <div class="slds-border_bottom slds-p-vertical_xx-small">
+                            <span class="slds-text-title_caps">Next Milestone Name</span>
+                            <div class="slds-text-heading_small">{booking.Next_Milestone_Name__c}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Schedule List -->
+                <div class="slds-col slds-size_1-of-1 slds-m-top_medium">
+                    <div class="slds-text-heading_small slds-m-bottom_small">Payment Schedule</div>
+                    <template if:true={schedules.length}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col"><div class="slds-truncate" title="Installment">Inst. #</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Milestone">Milestone</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Amount">Amount</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Due Date">Due Date</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Status">Status</div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={schedules} for:item="sch">
+                                    <tr key={sch.Id} class="slds-hint-parent">
+                                        <td><div class="slds-truncate">{sch.Installment_Number__c}</div></td>
+                                        <td><div class="slds-truncate">{sch.Milestone_Name__c}</div></td>
+                                        <td>
+                                            <div class="slds-truncate">
+                                                <lightning-formatted-number value={sch.Amount__c} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate">
+                                                <lightning-formatted-date-time value={sch.Due_Date__c} year="numeric" month="short" day="numeric"></lightning-formatted-date-time>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate">
+                                                <span class="slds-badge">{sch.Status__c}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                    <template if:false={schedules.length}>
+                        <p class="slds-text-color_weak">No payment schedules generated.</p>
+                    </template>
+                </div>
+
+                <!-- Reset/Modify Action button -->
+                <template if:true={hasModifyAccess}>
+                    <div class="slds-m-top_medium slds-text-align_right">
+                        <lightning-button label="Modify Payment Plan" variant="neutral" onclick={handleModifyPlan}></lightning-button>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

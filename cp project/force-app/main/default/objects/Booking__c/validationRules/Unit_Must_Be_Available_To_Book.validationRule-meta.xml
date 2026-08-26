@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unit_Must_Be_Available_To_Book</fullName>
+    <active>true</active>
+    <description>Selected Unit is already Booked or Sold. Please select an Available or temporarily Blocked unit.</description>
+    <errorConditionFormula>AND(ISNEW(), NOT(ISBLANK(Unit__c)), OR(ISPICKVAL(Unit__r.Status__c, &quot;Booked&quot;), ISPICKVAL(Unit__r.Status__c, &quot;Sold&quot;)))</errorConditionFormula>
+    <errorMessage>Selected Unit is already Booked or Sold. Please select an Available or temporarily Blocked unit.</errorMessage>
+</ValidationRule>

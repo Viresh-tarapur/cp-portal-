@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Modification_Requires_Valid_Reason</fullName>
+    <active>true</active>
+    <description>Please provide specific details in Other Reason Details when selecting &quot;Other&quot; as the modification reason.</description>
+    <errorConditionFormula>AND(ISPICKVAL(Modification_Reason__c, &quot;Other&quot;), ISBLANK(Other_Reason_Details__c))</errorConditionFormula>
+    <errorMessage>Please provide specific details in Other Reason Details when selecting &quot;Other&quot; as the modification reason.</errorMessage>
+</ValidationRule>

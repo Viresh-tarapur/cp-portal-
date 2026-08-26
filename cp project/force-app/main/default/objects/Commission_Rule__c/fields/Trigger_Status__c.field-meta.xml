@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Trigger_Status__c</fullName>
+    <label>Trigger Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+                <value>
+                    <fullName>Booking Confirmed</fullName>
+                    <default>false</default>
+                    <label>Booking Confirmed</label>
+                </value>
+                <value>
+                    <fullName>Customer Payment Received</fullName>
+                    <default>true</default>
+                    <label>Customer Payment Received</label>
+                </value>
+                <value>
+                    <fullName>Agreement Signed</fullName>
+                    <default>false</default>
+                    <label>Agreement Signed</label>
+                </value>
+                <value>
+                    <fullName>Milestone Completed</fullName>
+                    <default>false</default>
+                    <label>Milestone Completed</label>
+                </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

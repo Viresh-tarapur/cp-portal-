@@ -1,0 +1,116 @@
+<template>
+    <div class="project-details-wrap">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading Project Details" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={project}>
+                <!-- Back Navigation -->
+                <div class="top-nav-bar">
+                    <button class="back-link-btn" onclick={handleBack}>
+                        <lightning-icon icon-name="utility:back" size="x-small"></lightning-icon>
+                        <span>Back to All Projects</span>
+                    </button>
+                    <div class="top-cta-group">
+                        <button class="btn-secondary" onclick={handleViewInventory}>
+                            <lightning-icon icon-name="utility:matrix" size="x-small"></lightning-icon>
+                            <span>Explore Inventory Units</span>
+                        </button>
+                        <button class="btn-primary" onclick={handleRegisterLead}>
+                            <lightning-icon icon-name="utility:add" size="x-small" variant="inverse"></lightning-icon>
+                            <span>Register Lead for this Project</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hero Banner -->
+                <div class="hero-project-card">
+                    <div class="hero-media-box">
+                        <template if:true={project.Banner_Image_URL__c}>
+                            <img src={project.Banner_Image_URL__c} alt={project.Name} class="hero-banner-img"/>
+                        </template>
+                        <template if:false={project.Banner_Image_URL__c}>
+                            <div class="hero-banner-placeholder">
+                                <lightning-icon icon-name="custom:custom24" size="large"></lightning-icon>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="hero-info-box">
+                        <div class="badge-row">
+                            <span class="type-badge">{project.Project_Type__c}</span>
+                            <span class="status-badge">{project.Status__c}</span>
+                            <template if:true={project.RERA_Number__c}>
+                                <span class="rera-badge">RERA: {project.RERA_Number__c}</span>
+                            </template>
+                        </div>
+                        <h1 class="project-name-heading">{project.Name}</h1>
+                        <p class="location-text">
+                            <lightning-icon icon-name="utility:checkin" size="small"></lightning-icon>
+                            {project.Location__c}, {project.City__c}
+                        </p>
+
+                        <!-- Key Quick Stats -->
+                        <div class="specs-grid">
+                            <div class="spec-card">
+                                <span class="spec-label">Available Units</span>
+                                <span class="spec-value highlight-green">{project.Available_Units__c}</span>
+                            </div>
+                            <div class="spec-card">
+                                <span class="spec-label">Total Units</span>
+                                <span class="spec-value">{project.Total_Units__c}</span>
+                            </div>
+                            <div class="spec-card">
+                                <span class="spec-label">Starting Price</span>
+                                <span class="spec-value">₹{project.Minimum_Price__c}</span>
+                            </div>
+                            <div class="spec-card">
+                                <span class="spec-label">Target Completion</span>
+                                <span class="spec-value">{project.Completion_Date__c}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description & Specifications Tabbed Section -->
+                <div class="details-body-grid">
+                    <div class="desc-card">
+                        <h2 class="card-heading">Project Overview & Description</h2>
+                        <div class="desc-content">
+                            <p>{projectDescription}</p>
+                        </div>
+                    </div>
+
+                    <div class="side-info-card">
+                        <h3 class="card-heading-sm">Sales & Marketing Resources</h3>
+                        <div class="resource-list">
+                            <div class="resource-item">
+                                <lightning-icon icon-name="doctype:pdf" size="medium"></lightning-icon>
+                                <div class="res-text">
+                                    <span class="res-title">Project Brochure & Master Plan</span>
+                                    <span class="res-sub">PDF Format • High Resolution</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cta-box-sticky slds-m-top_large">
+                            <button class="full-cta-btn" onclick={handleRegisterLead}>
+                                <span>Register a Customer Now</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Embedded Inventory Section -->
+                <div class="slds-m-top_xx-large">
+                    <div class="inventory-section-header">
+                        <div class="inv-header-title">
+                            <lightning-icon icon-name="utility:matrix" size="medium"></lightning-icon>
+                            <h2>Live Inventory Matrix for {project.Name}</h2>
+                        </div>
+                    </div>
+                    <c-cp-inventory selected-project-id={projectId}></c-cp-inventory>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

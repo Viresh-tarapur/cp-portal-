@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Booking__c</entityName>
+    <fieldName>Stage__c</fieldName>
+    <masterLabel>Booking Stage Path</masterLabel>
+    <pathAssistantSteps>
+        <fieldNames>Agreement_Value__c</fieldNames>
+        <picklistValueName>Agreement</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>KYC_Verified__c</fieldNames>
+        <fieldNames>Welcome_Mail_Sent__c</fieldNames>
+        <fieldNames>Welcome_Call_Done__c</fieldNames>
+        <fieldNames>CRM_Executive__c</fieldNames>
+        <picklistValueName>Booked</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Total_Demanded__c</fieldNames>
+        <fieldNames>Total_Paid__c</fieldNames>
+        <fieldNames>Outstanding_Amount__c</fieldNames>
+        <picklistValueName>Demands</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Total_Paid__c</fieldNames>
+        <picklistValueName>Handover</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Booking_Date__c</fieldNames>
+        <fieldNames>Booking_Amount__c</fieldNames>
+        <fieldNames>Customer_Name__c</fieldNames>
+        <picklistValueName>New</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>DD_Uploaded__c</fieldNames>
+        <fieldNames>DD_Reference__c</fieldNames>
+        <picklistValueName>Registration</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>__MASTER__</recordTypeName>
+</PathAssistant>

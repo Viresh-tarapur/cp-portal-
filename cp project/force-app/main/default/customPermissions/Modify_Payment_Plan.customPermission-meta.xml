@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Required to configure or modify a Booking payment plan.</description>
+    <label>Modify Payment Plan</label>
+</CustomPermission>
