@@ -129,7 +129,13 @@ export default class CpLeadList extends LightningElement {
             );
         }
 
-        this.filteredLeads = result;
+        this.filteredLeads = result.map((l, idx) => ({
+            ...l,
+            rowIndex: idx + 1,
+            rowClass: l.showSameOwnerDup ? 'row-duplicate' : '',
+            isDifferentOwnerDup: l.isDuplicate && !l.showSameOwnerDup
+        }));
+
     }
 
     handleOpenRegisterLead() {
