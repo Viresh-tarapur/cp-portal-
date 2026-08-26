@@ -58,7 +58,7 @@
     <label>Real Estate Pre-Sales CRM</label>
     <navType>Standard</navType>
     <tabs>standard-home</tabs>
-    <tabs>CP_Lead_List</tabs>
+    <tabs>standard-Lead</tabs>
     <tabs>standard-Opportunity</tabs>
     <tabs>standard-Account</tabs>
     <tabs>standard-Contact</tabs>
