@@ -16,9 +16,9 @@
                 </div>
                 <div class="sf-header-actions">
                     <div class="slds-button-group" role="group">
-                        <button class="slds-button slds-button_brand" onclick={handleOpenRegisterLead}>New Lead</button>
-                        <button class="slds-button slds-button_neutral" onclick={handleImportClick}>Import</button>
-                        <button class="slds-button slds-button_neutral" onclick={handleChangeOwnerClick}>Change Owner</button>
+                        <button class="slds-button slds-button_brand sf-action-btn" onclick={handleOpenRegisterLead}>New Lead</button>
+                        <button class="slds-button slds-button_neutral sf-action-btn" onclick={handleImportClick}>Import</button>
+                        <button class="slds-button slds-button_neutral sf-action-btn" onclick={handleChangeOwnerClick}>Change Owner</button>
                         <button class="slds-button slds-button_icon slds-button_icon-border-filled" title="More Actions">
                             <lightning-icon icon-name="utility:down" size="x-small"></lightning-icon>
                         </button>
@@ -37,7 +37,7 @@
             <div class="sf-search-input">
                 <lightning-input
                     type="search"
-                    placeholder="🔍 Search this list..."
+                    placeholder="Search this list..."
                     value={searchKey}
                     onchange={handleSearchChange}
                     variant="label-hidden">
@@ -63,36 +63,51 @@
                             <thead>
                                 <tr>
                                     <th class="cb-col"><input type="checkbox" /></th>
-                                    <th>Lead Name</th>
-                                    <th>Company</th>
-                                    <th>Phone</th>
-                                    <th>Email</th>
-                                    <th>Assigned To (Round Robin)</th>
+                                    <th class="num-col">#</th>
+                                    <th class="sortable-th">Lead Name <span class="sort-arrow">↕</span></th>
+                                    <th class="sortable-th">Company <span class="sort-arrow">↕</span></th>
+                                    <th class="sortable-th">Phone <span class="sort-arrow">↕</span></th>
+                                    <th class="sortable-th">Email <span class="sort-arrow">↕</span></th>
+                                    <th class="sortable-th">Assigned To (Round Robin) <span class="sort-arrow">↕</span></th>
                                     <th>Duplicate Indicator</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <template for:each={filteredLeads} for:item="l">
-                                    <tr key={l.Id}>
+                                    <tr key={l.Id} class={l.rowClass}>
                                         <td class="cb-col"><input type="checkbox" /></td>
+                                        <td class="num-cell">{l.rowIndex}</td>
                                         <td class="name-cell">
                                             <a href="javascript:void(0);" class="sf-lead-link" onclick={handleViewDetails} data-id={l.Id}>
                                                 {l.Customer_Name__c}
                                             </a>
                                         </td>
-                                        <td>{l.Project__r.Name}</td>
+                                        <td class="company-cell">{l.Project__r.Name}</td>
                                         <td><span class="phone-text">{l.Customer_Phone__c}</span></td>
                                         <td><span class="email-text">{l.Customer_Email__c}</span></td>
                                         <td>
                                             <span class={l.ownerPillClass} title="Assigned by Round Robin">{l.ownerNameDisplay}</span>
                                         </td>
-                                        <td>
+                                        <td class="dup-indicator-cell">
                                             <template if:true={l.showSameOwnerDup}>
-                                                <span class="badge-same-owner-dup" title="Duplicate assigned to the same Sales Executive">D</span>
+                                                <div class="dup-wrapper">
+                                                    <span class="badge-same-owner-dup" title="Duplicate assigned to the same Sales Executive">D</span>
+                                                    <span class="dup-label">Same Sales Executive</span>
+                                                    <span class="dup-info-icon" title="Duplicate assigned to the same Sales Executive">ⓘ</span>
+                                                </div>
                                             </template>
                                             <template if:false={l.showSameOwnerDup}>
-                                                <span class="no-dup-text">—</span>
+                                                <div class="no-dup-wrapper">
+                                                    <span class="no-dup-dash">—</span>
+                                                    <template if:true={l.isDifferentOwnerDup}>
+                                                        <span class="diff-dup-label">Different Sales Executive</span>
+                                                    </template>
+                                                    <template if:false={l.isDifferentOwnerDup}>
+                                                        <span class="not-dup-label">Not a duplicate</span>
+                                                    </template>
+                                                    <span class="dup-info-icon dim" title="No duplicate detected">ⓘ</span>
+                                                </div>
                                             </template>
                                         </td>
                                         <td>
@@ -109,6 +124,10 @@
                                 </template>
                             </tbody>
                         </table>
+                    </div>
+                    <!-- Footer row count -->
+                    <div class="table-footer">
+                        <span class="footer-count">Showing {filteredLeads.length} of {totalCount} items</span>
                     </div>
                 </div>
             </template>

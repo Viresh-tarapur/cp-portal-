@@ -1,17 +1,22 @@
+/* ============================================================
+   CP Portal – Leads List Component CSS
+   UI-ONLY: No business logic changes
+   ============================================================ */
+
 .leads-container {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", Helvetica, Arial, sans-serif;
 }
 
-/* 1. Header Card */
+/* ── 1. Header Card ── */
 .sf-page-header {
-    background: #f3f4f6;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .sf-header-top {
@@ -25,7 +30,7 @@
 .sf-header-title-block {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.85rem;
 }
 
 .sf-title-text-wrap {
@@ -34,16 +39,18 @@
 }
 
 .sf-object-name {
-    font-size: 0.75rem;
-    color: #4b5563;
+    font-size: 0.72rem;
+    color: #64748b;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     line-height: 1;
 }
 
 .sf-header-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #111827;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #0f172a;
     margin: 0.2rem 0 0 0;
     display: flex;
     align-items: center;
@@ -52,214 +59,387 @@
 
 .sf-dropdown-arrow {
     font-size: 0.75rem;
-    color: #6b7280;
+    color: #94a3b8;
     cursor: pointer;
+    transition: color 0.15s;
 }
+.sf-dropdown-arrow:hover { color: #0176d3; }
 
 .sf-pin-icon {
     font-size: 0.9rem;
     cursor: pointer;
-    margin-left: 0.25rem;
+    margin-left: 0.1rem;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+}
+.sf-pin-icon:hover { opacity: 1; }
+
+/* Action buttons */
+.sf-action-btn {
+    border-radius: 6px !important;
+    font-size: 0.83rem !important;
+    font-weight: 600 !important;
+    transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+.sf-action-btn:hover {
+    transform: translateY(-1px);
 }
 
+/* ── 2. Header Meta Bar ── */
 .sf-header-meta {
-    margin-top: 0.6rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid #e5e7eb;
+    margin-top: 0.65rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid #f1f5f9;
 }
 
 .meta-text {
-    font-size: 0.8rem;
-    color: #6b7280;
+    font-size: 0.78rem;
+    color: #64748b;
     font-weight: 500;
 }
 
-/* 3. Toolbar Card */
+/* ── 3. Toolbar Card ── */
 .sf-toolbar-card {
     background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
     padding: 0.75rem 1.25rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .sf-search-input {
-    min-width: 280px;
+    min-width: 290px;
 }
 
 .filter-pills {
     display: flex;
     gap: 0.4rem;
+    flex-wrap: wrap;
 }
 
 .pill-btn {
-    background: #f3f4f6;
-    border: 1px solid #e5e7eb;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 9999px;
-    padding: 0.35rem 0.75rem;
-    font-size: 0.8rem;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.78rem;
     font-weight: 600;
-    color: #374151;
+    color: #475569;
     cursor: pointer;
     transition: all 0.15s ease;
 }
 
 .pill-btn:hover {
-    background: #e5e7eb;
+    background: #f1f5f9;
+    border-color: #cbd5e1;
 }
 
 .pill-btn.active {
-    background: #1f2937;
+    background: #0f172a;
     color: #ffffff;
-    border-color: #1f2937;
+    border-color: #0f172a;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
 }
 
-/* 4. Table Card & Design */
+/* ── 4. Table Card ── */
 .sf-table-card {
     background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+/* ── 5. Table Styling ── */
 .sf-leads-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.85rem;
+    font-size: 0.845rem;
+}
+
+.sf-leads-table thead tr {
+    border-bottom: 2px solid #e2e8f0;
 }
 
 .sf-leads-table th {
-    background: #f9fafb;
-    color: #374151;
+    background: #f8fafc;
+    color: #475569;
     font-weight: 700;
     text-transform: uppercase;
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
-    padding: 0.75rem 0.85rem;
-    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    padding: 0.85rem 0.9rem;
     text-align: left;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.sortable-th {
+    cursor: pointer;
+}
+.sortable-th:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.sort-arrow {
+    font-size: 0.65rem;
+    color: #cbd5e1;
+    margin-left: 0.2rem;
 }
 
 .sf-leads-table td {
-    padding: 0.75rem 0.85rem;
-    border-bottom: 1px solid #f3f4f6;
-    color: #1f2937;
+    padding: 0.82rem 0.9rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #1e293b;
     vertical-align: middle;
 }
 
+.sf-leads-table tbody tr:hover {
+    background: #f8fafc;
+    transition: background 0.15s ease;
+}
+
+/* Duplicate row highlight */
+.sf-leads-table tbody tr.row-duplicate {
+    background: #fff5f5;
+}
+.sf-leads-table tbody tr.row-duplicate:hover {
+    background: #fee2e2;
+}
+
+/* Column widths */
 .cb-col {
+    width: 36px;
+    text-align: center;
+    padding: 0.82rem 0.5rem !important;
+}
+
+.num-col {
     width: 36px;
     text-align: center;
 }
 
+.num-cell {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.name-cell {
+    min-width: 140px;
+}
+
+.company-cell {
+    color: #374151;
+}
+
+/* Lead link */
 .sf-lead-link {
     color: #0176d3;
     font-weight: 600;
     text-decoration: none;
+    transition: color 0.15s;
 }
-
 .sf-lead-link:hover {
+    color: #015ba7;
     text-decoration: underline;
 }
 
+/* Phone / Email */
 .phone-text {
-    color: #111827;
+    color: #1e293b;
     font-weight: 500;
+    font-variant-numeric: tabular-nums;
 }
 
 .email-text {
-    color: #4b5563;
+    color: #2563eb;
+    font-size: 0.82rem;
 }
 
-/* 6. Assigned To Color Pills */
+/* ── 6. Owner Colour Pills ── */
 .owner-pill {
-    display: inline-block;
-    padding: 0.2rem 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.22rem 0.7rem;
     border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.74rem;
+    font-weight: 700;
     white-space: nowrap;
+    border-width: 1px;
+    border-style: solid;
+    letter-spacing: 0.01em;
 }
 
 .owner-pill-se1 {
     background: #e0f2fe;
     color: #0369a1;
-    border: 1px solid #bae6fd;
+    border-color: #bae6fd;
 }
 
 .owner-pill-se2 {
     background: #dcfce7;
     color: #15803d;
-    border: 1px solid #bbf7d0;
+    border-color: #bbf7d0;
 }
 
 .owner-pill-se3 {
     background: #fef9c3;
     color: #a16207;
-    border: 1px solid #fef08a;
+    border-color: #fef08a;
 }
 
 .owner-pill-se4 {
     background: #f3e8ff;
     color: #6b21a8;
-    border: 1px solid #e9d5ff;
+    border-color: #e9d5ff;
 }
 
-/* 7. Duplicate Badge [D] */
+/* ── 7. Duplicate Indicator ── */
+.dup-indicator-cell {
+    min-width: 200px;
+}
+
+/* Same-exec duplicate */
+.dup-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
 .badge-same-owner-dup {
-    background: #ff5c5c;
+    background: #ef4444;
     color: #ffffff;
-    border-radius: 4px;
-    padding: 2px 7px;
+    border-radius: 9999px;
+    width: 20px;
+    height: 20px;
     font-weight: 800;
-    font-size: 11px;
-    display: inline-block;
+    font-size: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: help;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(239, 68, 68, 0.4);
 }
 
-.no-dup-text {
-    color: #9ca3af;
+.dup-label {
+    color: #dc2626;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+/* Non-duplicate / different exec */
+.no-dup-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.no-dup-dash {
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.diff-dup-label {
+    color: #64748b;
+    font-size: 0.78rem;
     font-weight: 500;
 }
 
+.not-dup-label {
+    color: #94a3b8;
+    font-size: 0.78rem;
+    font-weight: 400;
+}
+
+/* Info icon */
+.dup-info-icon {
+    color: #64748b;
+    font-size: 0.85rem;
+    cursor: help;
+    flex-shrink: 0;
+    transition: color 0.15s;
+}
+.dup-info-icon:hover { color: #0176d3; }
+.dup-info-icon.dim { color: #cbd5e1; }
+.dup-info-icon.dim:hover { color: #94a3b8; }
+
+/* ── 8. Action Buttons ── */
 .action-cell-btns {
     display: flex;
     gap: 0.4rem;
 }
 
 .icon-action-btn {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     border-radius: 6px;
-    border: 1px solid #d1d5db;
+    border: 1px solid #e2e8f0;
     background: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
 
 .icon-action-btn:hover {
-    background: #f3f4f6;
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
 }
 
+/* ── 9. Table Footer ── */
+.table-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid #f1f5f9;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.footer-count {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* ── 10. Empty State ── */
 .empty-leads {
     text-align: center;
-    padding: 3.5rem 2rem;
+    padding: 4rem 2rem;
     background: #ffffff;
-    border-radius: 8px;
-    border: 1px dashed #d1d5db;
+    border-radius: 10px;
+    border: 1px dashed #cbd5e1;
+    color: #64748b;
 }
 
-/* Modal details */
+.empty-leads h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 1rem 0 0.5rem 0;
+}
+
+.empty-leads p {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* ── 11. Modal ── */
 .modal-detail-header {
-    background: #111827;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     color: #ffffff;
 }
 
@@ -269,14 +449,16 @@
 }
 
 .modal-detail-code {
-    color: #9ca3af;
-    font-size: 0.82rem;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 0.25rem;
 }
 
 .lead-detail-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.25rem;
+    gap: 1.5rem;
 }
 
 .detail-group {
@@ -285,17 +467,18 @@
 }
 
 .detail-lbl {
-    font-size: 0.72rem;
-    color: #6b7280;
+    font-size: 0.7rem;
+    color: #64748b;
     text-transform: uppercase;
     font-weight: 600;
+    letter-spacing: 0.05em;
 }
 
 .detail-val {
     font-size: 0.95rem;
     font-weight: 700;
-    color: #111827;
-    margin-top: 0.2rem;
+    color: #0f172a;
+    margin-top: 0.25rem;
 }
 
 .highlight-blue {
@@ -304,14 +487,14 @@
 }
 
 .notes-box {
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
     padding: 1rem;
 }
 
 .notes-box p {
-    margin-top: 0.35rem;
+    margin-top: 0.4rem;
     color: #374151;
     font-size: 0.9rem;
     line-height: 1.5;

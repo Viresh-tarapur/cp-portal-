@@ -130,14 +130,22 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
     border: 1px solid #e2e8f0;
+    border-top: 3px solid transparent;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.metric-card:nth-child(1) { border-top-color: #2563eb; }
+.metric-card:nth-child(2) { border-top-color: #059669; }
+.metric-card:nth-child(3) { border-top-color: #d97706; }
+.metric-card:nth-child(4) { border-top-color: #7c3aed; }
+.metric-card:nth-child(5) { border-top-color: #16a34a; }
+.metric-card:nth-child(6) { border-top-color: #e11d48; }
+
 .metric-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.08);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.10);
 }
 
 .highlight-card {
@@ -202,7 +210,12 @@
     border-radius: 12px;
     padding: 1.5rem;
     border: 1px solid #e2e8f0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    transition: box-shadow 0.2s ease;
+}
+
+.section-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .section-header {
@@ -248,13 +261,18 @@
 .project-mini-card {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
+    border-left: 3px solid #2563eb;
     border-radius: 8px;
     padding: 1rem;
-    transition: all 0.15s ease;
+    transition: all 0.18s ease;
+    cursor: pointer;
 }
 
 .project-mini-card:hover {
-    border-color: #94a3b8;
+    background: #f1f5f9;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
 .proj-header {
